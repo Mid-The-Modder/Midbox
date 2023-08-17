@@ -66,8 +66,8 @@ var beepbox = (function (exports) {
         { name: "B", isWhiteKey: true, basePitch: 23 },
     ]);
     Config.blackKeyNameParents = [-1, 1, -1, 1, -1, 1, -1, -1, 1, -1, 1, -1];
-    Config.tempoMin = 30;
-    Config.tempoMax = 320;
+    Config.tempoMin = 1;
+    Config.tempoMax = 750;
     Config.echoDelayRange = 24;
     Config.echoDelayStepTicks = 4;
     Config.echoSustainRange = 8;
@@ -78,10 +78,10 @@ var beepbox = (function (exports) {
     Config.reverbRange = 32;
     Config.reverbDelayBufferSize = 16384;
     Config.reverbDelayBufferMask = Config.reverbDelayBufferSize - 1;
-    Config.beatsPerBarMin = 3;
-    Config.beatsPerBarMax = 16;
+    Config.beatsPerBarMin = 1;
+    Config.beatsPerBarMax = 32;
     Config.barCountMin = 1;
-    Config.barCountMax = 256;
+    Config.barCountMax = 512;
     Config.instrumentCountMin = 1;
     Config.layeredInstrumentCountMax = 4;
     Config.patternInstrumentCountMax = 10;
@@ -117,7 +117,9 @@ var beepbox = (function (exports) {
         { name: "1/8 pulse", expression: 0.5, samples: centerWave([1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]) },
         { name: "1/12 pulse", expression: 0.55, samples: centerWave([1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]) },
         { name: "1/16 pulse", expression: 0.575, samples: centerWave([1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]) },
-        { name: "heavy saw", expression: 0.4, samples: centerWave([1.0, -1.0, 2.0, -1.0, 0.0, 3.0, 1.0, -1.0, 2.0, -1.0, 0.0, 0.0]) },
+        { name: "heavy saw", expression: 0.5, samples: centerWave([1.0, -1.0, 2.0, -1.0, 0.0, 3.0, 1.0, -1.0, 2.0, -1.0, 0.0, 0.0]) },
+        { name: "bass-y", expression: 0.5, samples: centerWave([1.0, -5.0, 4.0, -3.0, 7.0, -2.0, 3.0, -3.0, 6.0]) },
+        { name: "strange", expression: 0.5, samples: centerWave([1.0, 11.0, 1.0, -11.0, -1.0, -11.0, 4.0, -6.0, 9.0, -1.0, -7.0, 11.0, 2.0, -5.0, 9.0, 9.0, -10.0]) },
         { name: "sawtooth", expression: 0.65, samples: centerWave([1.0 / 31.0, 3.0 / 31.0, 5.0 / 31.0, 7.0 / 31.0, 9.0 / 31.0, 11.0 / 31.0, 13.0 / 31.0, 15.0 / 31.0, 17.0 / 31.0, 19.0 / 31.0, 21.0 / 31.0, 23.0 / 31.0, 25.0 / 31.0, 27.0 / 31.0, 29.0 / 31.0, 31.0 / 31.0, -31.0 / 31.0, -29.0 / 31.0, -27.0 / 31.0, -25.0 / 31.0, -23.0 / 31.0, -21.0 / 31.0, -19.0 / 31.0, -17.0 / 31.0, -15.0 / 31.0, -13.0 / 31.0, -11.0 / 31.0, -9.0 / 31.0, -7.0 / 31.0, -5.0 / 31.0, -3.0 / 31.0, -1.0 / 31.0]) },
         { name: "double saw", expression: 0.5, samples: centerWave([0.0, -0.2, -0.4, -0.6, -0.8, -1.0, 1.0, -0.8, -0.6, -0.4, -0.2, 1.0, 0.8, 0.6, 0.4, 0.2]) },
         { name: "double pulse", expression: 0.4, samples: centerWave([1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0]) },
@@ -197,17 +199,18 @@ var beepbox = (function (exports) {
         { name: "bowed", voices: 2, spread: 0.02, offset: 0.0, expression: 1.0, sign: -1.0 },
         { name: "piano", voices: 2, spread: 0.01, offset: 0.0, expression: 1.0, sign: 0.7 },
         { name: "warbled", voices: 2, spread: 0.25, offset: 0.05, expression: 0.9, sign: -0.8 },
-        { name: "hyper", voices: 9, spread: 0.03, offset: -0.02, expression: 0.23, sign: 0.7 },
-        { name: "peak", voices: 3, spread: 12.038, offset: 12.01, expression: 0.65, sign: 0.9 },
-        { name: "deep shift", voices: 3, spread: 12.03, offset: -17.01, expression: 0.7, sign: 1.2 },
+        { name: "hyper", voices: 2, spread: 0.03, offset: -0.02, expression: 0.85, sign: 0.7 },
+        { name: "peak", voices: 2, spread: 12.038, offset: 12.01, expression: 0.85, sign: 0.9 },
+        { name: "deep shift", voices: 2, spread: 12.03, offset: -17.01, expression: 0.85, sign: 1.2 },
         { name: "broke", voices: 2, spread: 0.000211, offset: -0.3, expression: 0.8, sign: 1.0 },
-        { name: "vary", voices: 9, spread: 0.0018, offset: 0.0, expression: 0.18, sign: 1.6 },
-        { name: "energetic", voices: 3, spread: 6.15, offset: 6.435, expression: 0.7, sign: 0.9 },
+        { name: "vary", voices: 2, spread: 0.0018, offset: 0.0, expression: 0.85, sign: 1.6 },
+        { name: "energetic", voices: 2, spread: 6.15, offset: 6.435, expression: 0.85, sign: 0.9 },
         { name: "lone fifth", voices: 1, spread: 0.0, offset: 7.0, expression: 1.4, sign: 1.0 },
         { name: "alternate fifth", voices: 2, spread: 2.5, offset: -2.5, expression: 0.9, sign: 1.0 },
         { name: "offtune", voices: 2, spread: 0.40, offset: 0.40, expression: 0.9, sign: 1.0 },
-        { name: "hold", voices: 2, spread: 0.003, offset: 0.0, expression: 0.9, sign: -2.5 },
+        { name: "hold", voices: 2, spread: 0.003, offset: 0.0, expression: 0.8, sign: -2.5 },
         { name: "buried", voices: 2, spread: 0.03575, offset: -36.0, expression: 1.4, sign: 1.0 },
+        { name: "corrupt", voices: 2, spread: 18, offset: 48.0, expression: 0.7, sign: 0.7 },
     ]);
     Config.effectNames = ["reverb", "chorus", "panning", "distortion", "bitcrusher", "note filter", "echo", "pitch shift", "detune", "vibrato", "transition type", "chord type"];
     Config.effectOrder = [2, 10, 11, 7, 8, 9, 5, 3, 4, 1, 6, 0];
@@ -259,22 +262,39 @@ var beepbox = (function (exports) {
         { name: "0.125×", mult: 0.125, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "0.25×", mult: 0.25, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "0.50×", mult: 0.5, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~0.50×", mult: 0.5, hzOffset: 2.3, amplitudeSign: -1.0 },
         { name: "0.75×", mult: 0.75, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~0.75×", mult: 0.75, hzOffset: 1.9, amplitudeSign: -1.0 },
         { name: "1×", mult: 1.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "~1×", mult: 1.0, hzOffset: 1.5, amplitudeSign: -1.0 },
+        { name: "1.50×", mult: 1.5, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "2×", mult: 2.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "~2×", mult: 2.0, hzOffset: -1.3, amplitudeSign: -1.0 },
+        { name: "2.50×", mult: 2.5, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "3×", mult: 3.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "4×", mult: 4.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~4×", mult: 4.0, hzOffset: -2.1, amplitudeSign: -1.0 },
         { name: "5×", mult: 5.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "6×", mult: 6.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "7×", mult: 7.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "8×", mult: 8.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~8×", mult: 8.0, hzOffset: -4.2, amplitudeSign: -1.0 },
         { name: "9×", mult: 9.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "10×", mult: 10.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "11×", mult: 11.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "12×", mult: 12.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "13×", mult: 13.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "14×", mult: 14.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "15×", mult: 15.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "16×", mult: 16.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~16×", mult: 16.0, hzOffset: -6.3, amplitudeSign: -1.0 },
+        { name: "17×", mult: 17.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "18×", mult: 18.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "19×", mult: 19.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "20×", mult: 20.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "24×", mult: 24.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "32×", mult: 32.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+        { name: "~32×", mult: 32.0, hzOffset: -8.4, amplitudeSign: -1.0 },
     ]);
     Config.envelopes = toNameMap([
         { name: "none", type: 1, speed: 0.0 },
@@ -289,6 +309,7 @@ var beepbox = (function (exports) {
         { name: "swell 1", type: 5, speed: 32.0 },
         { name: "swell 2", type: 5, speed: 8.0 },
         { name: "swell 3", type: 5, speed: 2.0 },
+        { name: "slow swell", type: 5, speed: 0.5 },
         { name: "tremolo1", type: 6, speed: 4.0 },
         { name: "tremolo2", type: 6, speed: 2.0 },
         { name: "tremolo3", type: 6, speed: 1.0 },
@@ -299,7 +320,9 @@ var beepbox = (function (exports) {
         { name: "decay 2", type: 8, speed: 7.0 },
         { name: "decay 3", type: 8, speed: 4.0 },
         { name: "modbox trill", type: 10, speed: 40 },
-        { name: "modbox blip", type: 9, speed: 0.05 },
+        { name: "modbox blip", type: 9, speed: 4 },
+        { name: "modbox click", type: 11, speed: 5 },
+        { name: "modbox bow", type: 12, speed: 90 },
     ]);
     Config.feedbacks = toNameMap([
         { name: "1⟲", indices: [[1], [], [], []] },
@@ -335,7 +358,7 @@ var beepbox = (function (exports) {
     Config.harmonicsMax = (1 << Config.harmonicsControlPointBits) - 1;
     Config.harmonicsWavelength = 1 << 11;
     Config.pulseWidthRange = 50;
-    Config.pulseWidthStepPower = 0.5;
+    Config.pulseWidthStepPower = 0.50;
     Config.pitchChannelCountMin = 1;
     Config.pitchChannelCountMax = 40;
     Config.noiseChannelCountMin = 0;
@@ -352,8 +375,8 @@ var beepbox = (function (exports) {
     Config.justIntonationSemitones = [1.0 / 2.0, 8.0 / 15.0, 9.0 / 16.0, 3.0 / 5.0, 5.0 / 8.0, 2.0 / 3.0, 32.0 / 45.0, 3.0 / 4.0, 4.0 / 5.0, 5.0 / 6.0, 8.0 / 9.0, 15.0 / 16.0, 1.0, 16.0 / 15.0, 9.0 / 8.0, 6.0 / 5.0, 5.0 / 4.0, 4.0 / 3.0, 45.0 / 32.0, 3.0 / 2.0, 8.0 / 5.0, 5.0 / 3.0, 16.0 / 9.0, 15.0 / 8.0, 2.0].map(x => Math.log2(x) * Config.pitchesPerOctave);
     Config.pitchShiftRange = Config.justIntonationSemitones.length;
     Config.pitchShiftCenter = Config.pitchShiftRange >> 1;
-    Config.detuneCenter = 200;
-    Config.detuneMax = 400;
+    Config.detuneCenter = 600;
+    Config.detuneMax = 1200;
     Config.detuneMin = 0;
     Config.songDetuneMin = 0;
     Config.songDetuneMax = 500;
@@ -377,7 +400,7 @@ var beepbox = (function (exports) {
         { name: "noteVolume", computeIndex: 0, displayName: "note volume", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: null },
         { name: "pulseWidth", computeIndex: 2, displayName: "pulse width", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: [6] },
         { name: "stringSustain", computeIndex: 3, displayName: "sustain", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: [7] },
-        { name: "unison", computeIndex: 4, displayName: "unison", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: [0, 5, 7] },
+        { name: "unison", computeIndex: 4, displayName: "unison", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: [0, 5, 7, 8, 3, 6] },
         { name: "operatorFrequency", computeIndex: 5, displayName: "fm# freq", interleave: true, isFilter: false, maxCount: Config.operatorCount, effect: null, compatibleInstruments: [1] },
         { name: "operatorAmplitude", computeIndex: 9, displayName: "fm# volume", interleave: false, isFilter: false, maxCount: Config.operatorCount, effect: null, compatibleInstruments: [1] },
         { name: "feedbackAmplitude", computeIndex: 13, displayName: "fm feedback", interleave: false, isFilter: false, maxCount: 1, effect: null, compatibleInstruments: [1] },
@@ -441,7 +464,7 @@ var beepbox = (function (exports) {
         { name: "pulse width", pianoName: "Pulse Width", maxRawVol: Config.pulseWidthRange, newNoteVol: Config.pulseWidthRange, forSong: false, convertRealFactor: 0, associatedEffect: 12,
             promptName: "Pulse Width", promptDesc: ["This setting controls the width of this instrument's pulse wave, just like the pulse width slider.", "At $HI, your instrument will sound like a pure square wave (on 50% of the time). It will gradually sound narrower down to $LO, where it will be inaudible (as it is on 0% of the time).", "Changing pulse width randomly between a few values is a common strategy in chiptune music to lend some personality to a lead instrument.", "[OVERWRITING] [$LO - $HI] [%Duty]"] },
         { name: "detune", pianoName: "Detune", maxRawVol: Config.detuneMax - Config.detuneMin, newNoteVol: Config.detuneCenter, forSong: false, convertRealFactor: -Config.detuneCenter, associatedEffect: 8,
-            promptName: "Instrument Detune", promptDesc: ["This setting controls the detune for this instrument, just like the detune slider.", "At $MID, your instrument will have no detune applied. Each tick corresponds to one cent, or one-hundredth of a pitch. Thus, each change of 100 ticks corresponds to one half-step of detune, up to two half-steps up at $HI, or two half-steps down at $LO.", "[OVERWRITING] [$LO - $HI] [cents]"] },
+            promptName: "Instrument Detune", promptDesc: ["This setting controls the detune for this instrument, just like the detune slider.", "At $MID, your instrument will have no detune applied. Each tick corresponds to one cent, or one-hundredth of a pitch. Thus, each change of 100 ticks corresponds to one half-step of detune, up to six half-steps up at $HI, or six half-steps down at $LO.", "[OVERWRITING] [$LO - $HI] [cents]"] },
         { name: "vibrato depth", pianoName: "Vibrato Depth", maxRawVol: 50, newNoteVol: 0, forSong: false, convertRealFactor: 0, associatedEffect: 9,
             promptName: "Vibrato Depth", promptDesc: ["This setting controls the amount that your pitch moves up and down by during vibrato, just like the vibrato depth slider.", "At $LO, your instrument will have no vibrato depth so its vibrato would be inaudible. This increases up to $HI, where an extreme pitch change will be noticeable.", "[OVERWRITING] [$LO - $HI] [pitch ÷25]"] },
         { name: "song detune", pianoName: "Detune", maxRawVol: Config.songDetuneMax - Config.songDetuneMin, newNoteVol: Math.ceil((Config.songDetuneMax - Config.songDetuneMin) / 2), forSong: true, convertRealFactor: -250, associatedEffect: 12,
@@ -791,8 +814,8 @@ var beepbox = (function (exports) {
             return null;
         }
     }
-    EditorConfig.version = "2.5";
-    EditorConfig.versionDisplayName = "JummBox " + EditorConfig.version;
+    EditorConfig.version = "0.2";
+    EditorConfig.versionDisplayName = "Midbox " + EditorConfig.version;
     EditorConfig.releaseNotesURL = "https://jummbus.bitbucket.io/patch_notes/" + EditorConfig.version + ".html";
     EditorConfig.isOnMac = /^Mac/i.test(navigator.platform) || /Mac OS X/i.test(navigator.userAgent) || /^(iPhone|iPad|iPod)/i.test(navigator.platform) || /(iPhone|iPad|iPod)/i.test(navigator.userAgent);
     EditorConfig.ctrlSymbol = EditorConfig.isOnMac ? "⌘" : "Ctrl+";
@@ -835,6 +858,17 @@ var beepbox = (function (exports) {
                 { name: "rough glistening piano", midiProgram: 80, settings: { "type": "harmonics", "eqFilter": [{ "type": "peak", "cutoffHz": 210.22, "linearGain": 1.4142 }, { "type": "high-pass", "cutoffHz": 125, "linearGain": 0.1768 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "peak", "cutoffHz": 210.22, "linearGain": 1.4142 }, { "type": "high-pass", "cutoffHz": 125, "linearGain": 0.1768 }], "effects": ["chord type", "note filter", "chorus", "echo", "reverb"], "chord": "strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 5656.85, "linearGain": 0.5 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 5656.85, "linearGain": 0.5 }], "panDelay": 10, "chorus": 29, "echoSustain": 43, "echoDelayBeats": 1, "reverb": 23, "fadeInSeconds": 0, "fadeOutTicks": 48, "harmonics": [100, 71, 43, 29, 29, 14, 14, 43, 0, 43, 0, 57, 71, 0, 71, 43, 0, 0, 57, 0, 57, 0, 71, 0, 71, 0, 57, 0], "unison": "honky tonk", "envelopes": [{ "target": "noteFilterFreq", "envelope": "twang 2", "index": 0 }] } },
                 { name: "soft glistening piano", midiProgram: 80, settings: { "type": "harmonics", "eqFilter": [{ "type": "high-pass", "cutoffHz": 210.22, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 210.22, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "effects": ["chord type", "detune", "note filter", "chorus", "reverb"], "chord": "medium strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "detuneCents": -20, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 5656.85, "linearGain": 0.5 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 5656.85, "linearGain": 0.5 }], "panDelay": 10, "chorus": 29, "reverb": 97, "fadeInSeconds": 0.135, "fadeOutTicks": 48, "harmonics": [100, 0, 0, 29, 29, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 43, 14, 0, 0, 0, 0], "unison": "honky tonk", "envelopes": [{ "target": "noteFilterFreq", "envelope": "twang 2", "index": 0 }] } },
                 { name: "jingle bells", midiProgram: 80, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 9513.66, "linearGain": 0.3536 }, { "type": "high-pass", "cutoffHz": 707.11, "linearGain": 2 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 9513.66, "linearGain": 0.3536 }, { "type": "high-pass", "cutoffHz": 707.11, "linearGain": 2 }], "effects": ["chord type", "pitch shift", "detune", "note filter", "bitcrusher", "chorus", "echo", "reverb"], "chord": "1/3 strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "pitchShiftSemitones": 24, "detuneCents": 8, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 2 }, { "type": "high-pass", "cutoffHz": 176.78, "linearGain": 0.5 }, { "type": "peak", "cutoffHz": 2378.41, "linearGain": 0.7071 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 2.8284 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 2 }, { "type": "high-pass", "cutoffHz": 176.78, "linearGain": 0.5 }, { "type": "peak", "cutoffHz": 2378.41, "linearGain": 0.7071 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 2.8284 }], "bitcrusherOctave": 5, "bitcrusherQuantization": 0, "panDelay": 10, "chorus": 29, "echoSustain": 57, "echoDelayBeats": 1.667, "reverb": 77, "fadeInSeconds": 0, "fadeOutTicks": 12, "harmonics": [100, 29, 57, 71, 0, 0, 0, 0, 0, 0, 0, 14, 43, 14, 0, 0, 0, 0, 0, 0, 14, 0, 14, 14, 0, 0, 0, 0], "unison": "none", "envelopes": [{ "target": "noteVolume", "envelope": "twang 2" }] } },
+                { name: "odd snare", midiProgram: 80, settings: { "type": "FM", "eqFilter": [], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [], "effects": ["pitch shift", "detune", "note filter", "distortion", "bitcrusher", "chorus", "echo", "reverb"], "pitchShiftSemitones": 24, "detuneCents": 600, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 176.78, "linearGain": 2.8284 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 176.78, "linearGain": 2.8284 }], "distortion": 29, "aliases": false, "bitcrusherOctave": 4.5, "bitcrusherQuantization": 43, "panDelay": 10, "chorus": 29, "echoSustain": 43, "echoDelayBeats": 0.083, "reverb": 3, "fadeInSeconds": 0, "fadeOutTicks": 12, "algorithm": "(1 2)←3←4", "feedbackType": "2⟲ 3⟲ 4⟲", "feedbackAmplitude": 15, "operators": [{ "frequency": "16×", "amplitude": 15, "waveform": "pulse width", "pulseWidth": 5 }, { "frequency": "32×", "amplitude": 12, "waveform": "sine", "pulseWidth": 9 }, { "frequency": "2×", "amplitude": 11, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "13×", "amplitude": 6, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 3", "index": 0 }, { "target": "noteFilterFreq", "envelope": "twang 1", "index": 0 }, { "target": "operatorFrequency", "envelope": "modbox click", "index": 2 }, { "target": "pitchShift", "envelope": "twang 3" }, { "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }, { "target": "noteFilterFreq", "envelope": "swell 1", "index": 1 }, { "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }, { "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }] } },
+                { name: "otherworldly kick", midiProgram: 80, settings: { "type": "FM", "eqFilter": [], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [], "effects": ["pitch shift", "vibrato", "distortion", "bitcrusher", "chorus"], "pitchShiftSemitones": 12, "vibrato": "custom", "vibratoDepth": 0.92, "vibratoDelay": 18, "vibratoSpeed": 30, "vibratoType": 0, "distortion": 29, "aliases": false, "bitcrusherOctave": 6, "bitcrusherQuantization": 57, "panDelay": 10, "chorus": 14, "fadeInSeconds": 0, "fadeOutTicks": 24, "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "20×", "amplitude": 15, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }, { "target": "noteVolume", "envelope": "twang 3" }, { "target": "pitchShift", "envelope": "twang 1" }, { "target": "pitchShift", "envelope": "twang 1" }, { "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }] } },
+                { name: "bit-crushed piano", midiProgram: 80, settings: { "type": "chip", "eqFilter": [{ "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 500, "linearGain": 1.4142 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 500, "linearGain": 1.4142 }], "effects": ["transition type", "chord type", "pitch shift", "vibrato", "note filter", "bitcrusher", "chorus", "echo", "reverb"], "transition": "normal", "clicklessTransition": false, "chord": "strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "pitchShiftSemitones": 24, "vibrato": "custom", "vibratoDepth": 0.72, "vibratoDelay": 19, "vibratoSpeed": 30, "vibratoType": 0, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 4756.83, "linearGain": 0.0884 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 4756.83, "linearGain": 0.0884 }], "bitcrusherOctave": 3, "bitcrusherQuantization": 29, "panDelay": 10, "chorus": 29, "echoSustain": 29, "echoDelayBeats": 0.75, "reverb": 23, "fadeInSeconds": 0, "fadeOutTicks": 12, "wave": "triangle", "unison": "broke", "envelopes": [{ "target": "noteFilterFreq", "envelope": "twang 1", "index": 0 }] } },
+                { name: "boop pad", midiProgram: 80, settings: { "type": "custom chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 11313.71, "linearGain": 0.1768 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 11313.71, "linearGain": 0.1768 }], "effects": ["transition type", "note filter", "reverb"], "transition": "interrupt", "clicklessTransition": false, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.0884 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.0884 }], "panDelay": 10, "reverb": 48, "fadeInSeconds": 0, "fadeOutTicks": 96, "wave": "square", "unison": "broke", "customChipWave": { "0": -1, "1": 1, "2": -1, "3": -4, "4": -6, "5": -8, "6": -11, "7": -12, "8": -15, "9": -16, "10": -18, "11": -19, "12": -21, "13": -22, "14": -24, "15": -24, "16": -24, "17": -24, "18": -23, "19": -22, "20": -21, "21": -19, "22": -17, "23": -16, "24": -14, "25": -13, "26": -10, "27": -8, "28": -6, "29": -4, "30": -2, "31": -1, "32": 2, "33": 3, "34": 5, "35": 7, "36": 10, "37": 12, "38": 14, "39": 16, "40": 18, "41": 19, "42": 20, "43": 21, "44": 23, "45": 23, "46": 24, "47": 24, "48": 24, "49": 24, "50": 24, "51": 24, "52": 24, "53": 24, "54": 24, "55": 24, "56": 24, "57": 24, "58": 23, "59": 22, "60": 21, "61": 19, "62": 16, "63": 14 }, "customChipWaveIntegral": { "0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0, "13": 0, "14": 0, "15": 0, "16": 0, "17": 0, "18": 0, "19": 0, "20": 0, "21": 0, "22": 0, "23": 0, "24": 0, "25": 0, "26": 0, "27": 0, "28": 0, "29": 0, "30": 0, "31": 0, "32": 0, "33": 0, "34": 0, "35": 0, "36": 0, "37": 0, "38": 0, "39": 0, "40": 0, "41": 0, "42": 0, "43": 0, "44": 0, "45": 0, "46": 0, "47": 0, "48": 0, "49": 0, "50": 0, "51": 0, "52": 0, "53": 0, "54": 0, "55": 0, "56": 0, "57": 0, "58": 0, "59": 0, "60": 0, "61": 0, "62": 0, "63": 0, "64": 0 }, "envelopes": [{ "target": "noteVolume", "envelope": "twang 2" }, { "target": "noteFilterFreq", "envelope": "twang 2", "index": 0 }] } },
+                { name: "spectrum pad", midiProgram: 80, settings: { "type": "spectrum", "eqFilter": [{ "type": "low-pass", "cutoffHz": 2196.8, "linearGain": 1 }], "eqFilterType": true, "eqSimpleCut": 6, "eqSimplePeak": 2, "eqSubFilters1": [], "effects": ["vibrato", "distortion", "bitcrusher", "reverb"], "vibrato": "delayed", "vibratoDepth": 0.3, "vibratoDelay": 18.5, "vibratoSpeed": 10, "vibratoType": 0, "distortion": 29, "aliases": false, "bitcrusherOctave": 4.5, "bitcrusherQuantization": 43, "panDelay": 10, "reverb": 26, "fadeInSeconds": 0, "fadeOutTicks": -1, "spectrum": [100, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 57, 0, 0, 57, 0, 43, 0, 43, 0, 0, 29, 0, 29, 0, 14, 14, 14, 0, 0], "envelopes": [] } },
+                { name: "3, 2, 1, GO! pulse", midiProgram: 80, settings: { "type": "PWM", "eqFilter": [{ "type": "peak", "cutoffHz": 2828.43, "linearGain": 2 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "effects": ["transition type", "pitch shift", "detune", "chorus", "echo", "reverb"], "transition": "normal", "clicklessTransition": false, "pitchShiftSemitones": 16, "detuneCents": 196, "panDelay": 10, "chorus": 14, "echoSustain": 29, "echoDelayBeats": 0.5, "reverb": 13, "fadeInSeconds": 0, "fadeOutTicks": 48, "pulseWidth": 42, "envelopes": [{ "target": "pitchShift", "envelope": "twang 1" }, { "target": "pitchShift", "envelope": "twang 1" }] } },
+                { name: "ambient pulse 1", midiProgram: 80, settings: { "type": "FM", "eqFilter": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }, { "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.25 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }, { "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.25 }], "effects": ["note filter", "echo", "reverb"], "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 2378.41, "linearGain": 2.8284 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 2378.41, "linearGain": 2.8284 }], "panDelay": 10, "echoSustain": 29, "echoDelayBeats": 1.333, "reverb": 35, "fadeInSeconds": 0, "fadeOutTicks": 96, "algorithm": "(1 2)←(3 4)", "feedbackType": "4⟲", "feedbackAmplitude": 9, "operators": [{ "frequency": "1×", "amplitude": 13, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 13, "waveform": "pulse width", "pulseWidth": 6 }, { "frequency": "3×", "amplitude": 0, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "~2×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "flare 1", "index": 2 }] } },
+                { name: "saturn pad", midiProgram: 80, settings: { "type": "Picked String", "eqFilter": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 1 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 1.4142 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 1 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 1.4142 }], "effects": ["note filter", "reverb"], "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 0.5 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 0.5 }], "panDelay": 10, "reverb": 26, "fadeInSeconds": 0, "fadeOutTicks": 24, "harmonics": [0, 100, 100, 100, 0, 0, 0, 0, 43, 43, 0, 86, 0, 100, 0, 29, 0, 0, 0, 0, 71, 57, 0, 0, 86, 0, 0, 43], "unison": "shimmer", "stringSustain": 93, "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "tremolo3" }, { "target": "noteFilterAllFreqs", "envelope": "twang 3" }] } },
+                { name: "build-up pad", midiProgram: 80, settings: { "type": "FM", "eqFilter": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "effects": ["note filter", "reverb"], "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.3536 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.3536 }], "panDelay": 10, "reverb": 32, "fadeInSeconds": 0, "fadeOutTicks": 96, "algorithm": "(1 2)←(3 4)", "feedbackType": "4⟲", "feedbackAmplitude": 9, "operators": [{ "frequency": "1×", "amplitude": 13, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 13, "waveform": "pulse width", "pulseWidth": 6 }, { "frequency": "3×", "amplitude": 0, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "~2×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "flare 1", "index": 2 }, { "target": "noteFilterFreq", "envelope": "slow swell", "index": 0 }] } },
+                { name: "ambient pulse 2", midiProgram: 80, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 1189.21, "linearGain": 0.7071 }, { "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "peak", "cutoffHz": 420.45, "linearGain": 8 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 1189.21, "linearGain": 0.7071 }, { "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "peak", "cutoffHz": 420.45, "linearGain": 8 }], "effects": ["chord type", "note filter", "reverb"], "chord": "medium strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 1681.79, "linearGain": 1 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 1681.79, "linearGain": 1 }], "panDelay": 10, "reverb": 32, "fadeInSeconds": 0, "fadeOutTicks": 72, "harmonics": [57, 57, 71, 57, 43, 43, 43, 71, 43, 43, 43, 57, 71, 86, 100, 86, 57, 57, 43, 43, 43, 57, 43, 29, 43, 57, 57, 43], "unison": "vary", "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "tremolo5" }] } },
+                { name: "hyper synth saw", midiProgram: 80, settings: { "type": "chip", "eqFilter": [{ "type": "peak", "cutoffHz": 19027.31, "linearGain": 11.3137 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 1.4142 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "peak", "cutoffHz": 19027.31, "linearGain": 11.3137 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 1.4142 }], "effects": ["chord type", "detune", "vibrato", "distortion", "chorus", "echo", "reverb"], "chord": "medium strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "detuneCents": 16, "vibrato": "delayed", "vibratoDepth": 0.3, "vibratoDelay": 18.5, "vibratoSpeed": 10, "vibratoType": 0, "distortion": 14, "aliases": false, "panDelay": 10, "chorus": 86, "echoSustain": 43, "echoDelayBeats": 1, "reverb": 58, "fadeInSeconds": 0, "fadeOutTicks": 96, "wave": "sawtooth", "unison": "hyper", "envelopes": [] } },
             ])
         },
         {
@@ -847,6 +881,12 @@ var beepbox = (function (exports) {
                 { name: "dubstep lead", midiProgram: 80, settings: { "type": "FM", "eqFilter": [{ "type": "peak", "cutoffHz": 1189.21, "linearGain": 0.0884 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "peak", "cutoffHz": 1189.21, "linearGain": 0.0884 }], "effects": ["transition type", "pitch shift", "note filter", "distortion", "bitcrusher"], "transition": "normal", "clicklessTransition": false, "pitchShiftSemitones": 0, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "peak", "cutoffHz": 594.6, "linearGain": 5.6569 }, { "type": "low-pass", "cutoffHz": 1000, "linearGain": 2 }], "noteSubFilters0": [{ "type": "peak", "cutoffHz": 594.6, "linearGain": 5.6569 }, { "type": "low-pass", "cutoffHz": 1000, "linearGain": 2 }], "distortion": 29, "aliases": false, "bitcrusherOctave": 6.5, "bitcrusherQuantization": 86, "panDelay": 10, "fadeInSeconds": 0, "fadeOutTicks": -1, "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 15, "operators": [{ "frequency": "1×", "amplitude": 15, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 15, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 15, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "noteFilterFreq", "envelope": "note size", "index": 0 }, { "target": "noteFilterFreq", "envelope": "note size", "index": 1 }] } },
                 { name: "dubstep dyaii", midiProgram: 80, settings: { "type": "Picked String", "eqFilter": [{ "type": "high-pass", "cutoffHz": 125, "linearGain": 0.5 }, { "type": "low-pass", "cutoffHz": 3363.59, "linearGain": 0.5 }, { "type": "peak", "cutoffHz": 11313.71, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1000, "linearGain": 0.0884 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 125, "linearGain": 0.5 }, { "type": "low-pass", "cutoffHz": 3363.59, "linearGain": 0.5 }, { "type": "peak", "cutoffHz": 11313.71, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1000, "linearGain": 0.0884 }], "effects": ["transition type", "vibrato", "note filter", "distortion", "bitcrusher", "chorus", "reverb"], "transition": "slide", "clicklessTransition": false, "vibrato": "custom", "vibratoDepth": 0.44, "vibratoDelay": 23, "vibratoSpeed": 26, "vibratoType": 0, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 707.11, "linearGain": 8 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 11.3137 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 707.11, "linearGain": 8 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 11.3137 }], "distortion": 29, "aliases": false, "bitcrusherOctave": 3, "bitcrusherQuantization": 71, "panDelay": 10, "chorus": 71, "reverb": 32, "fadeInSeconds": 0, "fadeOutTicks": 12, "harmonics": [100, 0, 71, 86, 0, 0, 100, 86, 86, 71, 57, 57, 29, 14, 57, 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "unison": "none", "stringSustain": 100, "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "note size" }, { "target": "noteFilterAllFreqs", "envelope": "twang 3" }] } },
                 { name: "dubstep alarm", midiProgram: 80, settings: { "type": "FM", "eqFilter": [{ "type": "peak", "cutoffHz": 2000, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.5 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "peak", "cutoffHz": 2000, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.5 }], "effects": ["transition type", "pitch shift", "note filter", "distortion", "bitcrusher"], "transition": "normal", "clicklessTransition": false, "pitchShiftSemitones": 0, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "high-pass", "cutoffHz": 1414.21, "linearGain": 11.3137 }], "noteSubFilters0": [{ "type": "high-pass", "cutoffHz": 1414.21, "linearGain": 11.3137 }], "distortion": 29, "aliases": false, "bitcrusherOctave": 6.5, "bitcrusherQuantization": 100, "panDelay": 10, "fadeInSeconds": 0, "fadeOutTicks": -1, "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 6, "operators": [{ "frequency": "1×", "amplitude": 15, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 15, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "noteFilterFreq", "envelope": "note size", "index": 0 }] } },
+            ])
+        },
+        {
+            name: "Midbox Noise Presets",
+            presets: toNameMap([
+                { name: "hollow retro riser", midiProgram: 80, isNoise: true, settings: { "type": "noise", "eqFilter": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.3536 }], "eqFilterType": true, "eqSimpleCut": 8, "eqSimplePeak": 0, "eqSubFilters1": [], "effects": ["bitcrusher", "chorus", "echo", "reverb"], "bitcrusherOctave": 4, "bitcrusherQuantization": 43, "panDelay": 10, "chorus": 29, "echoSustain": 57, "echoDelayBeats": 0.5, "reverb": 29, "fadeInSeconds": 0, "fadeOutTicks": -3, "wave": "hollow", "envelopes": [] } },
             ])
         },
         {
@@ -8731,16 +8771,16 @@ li.select2-results__option[role=group] > strong:hover {
             this.scale = 0;
             this.key = 0;
             this.loopStart = 0;
-            this.loopLength = 4;
+            this.loopLength = 8;
             this.tempo = 150;
             this.reverb = 0;
             this.beatsPerBar = 8;
             this.barCount = 16;
-            this.patternsPerChannel = 8;
+            this.patternsPerChannel = 32;
             this.rhythm = 1;
             this.layeredInstruments = false;
             this.patternInstruments = false;
-            this.title = "Unnamed";
+            this.title = "Untitled Project";
             document.title = EditorConfig.versionDisplayName;
             if (andResetChannels) {
                 this.pitchChannelCount = 3;
@@ -11493,7 +11533,23 @@ li.select2-results__option[role=group] > strong:hover {
                 case 10:
                     const decay = 0.25 / Math.sqrt(envelope.speed);
                     return time < decay ? (decay - time) / decay : 1.0;
-                case 9: return Math.max((1.5 / (-0.85 + envelope.speed - 100 * time + 0.55))) - 1.08;
+                case 9: {
+                    const endTime1 = 0.25 / Math.sqrt(envelope.speed);
+                    const endTime2 = 0.7 / Math.sqrt(envelope.speed);
+                    const zeroIntercept = 2;
+                    const startValue2 = 0.9;
+                    return time < endTime1 ? ((startValue2 - zeroIntercept) / endTime1) * time + zeroIntercept : time < endTime2 ? ((1 - startValue2) / (endTime2 - endTime1)) * (time - endTime1) + startValue2 : 1.0;
+                }
+                case 11: {
+                    const attack = 0.25 / envelope.speed;
+                    const zeroIntercept = 9.5;
+                    return time < attack ? (time * ((-zeroIntercept) + 1) - attack * (-zeroIntercept)) / attack : 1.0;
+                }
+                case 12: {
+                    const attack = 0.25 / Math.sqrt(envelope.speed);
+                    const zeroIntercept = -0.40;
+                    return time < attack ? (time * ((-zeroIntercept) + 1) - attack * (-zeroIntercept)) / attack : 1.0;
+                }
                 default: throw new Error("Unrecognized operator envelope type.");
             }
         }
@@ -14348,7 +14404,7 @@ li.select2-results__option[role=group] > strong:hover {
                     settingsExpressionMult *= Math.pow(2.0, 0.7 * (1.0 - useSustainStart / (Config.stringSustainRange - 1)));
                 }
                 const startFreq = Instrument.frequencyFromPitch(startPitch);
-                if (instrument.type == 0 || instrument.type == 8 || instrument.type == 5 || instrument.type == 7) {
+                if (instrument.type == 0 || instrument.type == 8 || instrument.type == 5 || instrument.type == 7 || instrument.type == 3 || instrument.type == 6) {
                     const unison = Config.unisons[instrument.unison];
                     const voiceCountExpression = (instrument.type == 7) ? 1 : unison.voices / 2.0;
                     settingsExpressionMult *= unison.expression * voiceCountExpression;
@@ -16541,41 +16597,62 @@ li.select2-results__option[role=group] > strong:hover {
             }
             else {
                 const type = selectWeightedRandom([
-                    { item: 0, weight: 4 },
-                    { item: 6, weight: 4 },
-                    { item: 5, weight: 5 },
-                    { item: 7, weight: 5 },
-                    { item: 3, weight: 1 },
-                    { item: 1, weight: 5 },
+                    { item: 0, weight: 3 },
+                    { item: 6, weight: 3 },
+                    { item: 5, weight: 3 },
+                    { item: 7, weight: 3 },
+                    { item: 3, weight: 3 },
+                    { item: 1, weight: 3 },
                 ]);
                 instrument.preset = instrument.type = type;
                 instrument.fadeIn = (Math.random() < 0.5) ? 0 : selectCurvedDistribution(0, Config.fadeInRange - 1, 0, 2);
                 instrument.fadeOut = selectCurvedDistribution(0, Config.fadeOutTicks.length - 1, Config.fadeOutNeutral, 2);
                 if (type == 0 || type == 5 || type == 7) {
                     instrument.unison = Config.unisons.dictionary[selectWeightedRandom([
-                        { item: "none", weight: 10 },
-                        { item: "shimmer", weight: 5 },
-                        { item: "hum", weight: 4 },
-                        { item: "honky tonk", weight: 3 },
-                        { item: "dissonant", weight: 1 },
-                        { item: "fifth", weight: 1 },
+                        { item: "none", weight: 20 },
+                        { item: "shimmer", weight: 2 },
+                        { item: "hum", weight: 2 },
+                        { item: "honky tonk", weight: 2 },
+                        { item: "dissonant", weight: 2 },
+                        { item: "fifth", weight: 2 },
                         { item: "octave", weight: 2 },
                         { item: "bowed", weight: 2 },
-                        { item: "piano", weight: 5 },
-                        { item: "warbled", weight: 3 },
+                        { item: "piano", weight: 2 },
+                        { item: "warbled", weight: 2 },
+                        { item: "hyper", weight: 2 },
+                        { item: "peak", weight: 2 },
+                        { item: "deep shift", weight: 2 },
+                        { item: "broke", weight: 2 },
+                        { item: "vary", weight: 2 },
+                        { item: "energetic", weight: 2 },
+                        { item: "lone fifth", weight: 2 },
+                        { item: "alternate fifth", weight: 2 },
+                        { item: "offtune", weight: 2 },
+                        { item: "hold", weight: 2 },
+                        { item: "buried", weight: 2 },
                     ])].index;
                 }
                 if (Math.random() < 0.1) {
                     instrument.effects |= 1 << 10;
                     instrument.transition = Config.transitions.dictionary[selectWeightedRandom([
                         { item: "interrupt", weight: 1 },
-                        { item: "slide", weight: 2 },
+                        { item: "slide", weight: 1 },
+                        { item: "insta-slide", weight: 1 },
+                        { item: "slide in pattern", weight: 1 },
+                        { item: "continue", weight: 1 },
+                        { item: "continue in pattern", weight: 1 },
                     ])].index;
                 }
                 if (Math.random() < 0.2) {
                     instrument.effects |= 1 << 11;
                     instrument.chord = Config.chords.dictionary[selectWeightedRandom([
-                        { item: "strum", weight: 2 },
+                        { item: "strum", weight: 1 },
+                        { item: "medium strum", weight: 1 },
+                        { item: "slow strum", weight: 1 },
+                        { item: "1/3 strum", weight: 1 },
+                        { item: "1/3 medium strum", weight: 1 },
+                        { item: "1/3 slow strum", weight: 1 },
+                        { item: "build up", weight: 1 },
                         { item: "arpeggio", weight: 1 },
                     ])].index;
                 }
@@ -16584,15 +16661,22 @@ li.select2-results__option[role=group] > strong:hover {
                     if (instrument.pitchShift != Config.pitchShiftCenter) {
                         instrument.effects |= 1 << 7;
                         instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pitchShift"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                            { item: "none", weight: 4 },
+                            { item: "punch", weight: 2 },
                             { item: "flare 1", weight: 2 },
-                            { item: "flare 2", weight: 1 },
-                            { item: "flare 3", weight: 1 },
-                            { item: "twang 1", weight: 16 },
-                            { item: "twang 2", weight: 8 },
-                            { item: "twang 3", weight: 4 },
-                            { item: "decay 1", weight: 4 },
+                            { item: "flare 2", weight: 2 },
+                            { item: "flare 3", weight: 2 },
+                            { item: "twang 1", weight: 2 },
+                            { item: "twang 2", weight: 2 },
+                            { item: "twang 3", weight: 2 },
+                            { item: "decay 1", weight: 2 },
                             { item: "decay 2", weight: 2 },
-                            { item: "decay 3", weight: 1 },
+                            { item: "decay 3", weight: 2 },
+                            { item: "swell 1", weight: 2 },
+                            { item: "swell 2", weight: 2 },
+                            { item: "swell 3", weight: 2 },
+                            { item: "modbox bow", weight: 2 },
+                            { item: "modbox click", weight: 2 },
                         ])].index);
                     }
                 }
@@ -16602,7 +16686,7 @@ li.select2-results__option[role=group] > strong:hover {
                     instrument.vibrato = Config.vibratos.dictionary[selectWeightedRandom([
                         { item: "light", weight: 2 },
                         { item: "delayed", weight: 2 },
-                        { item: "heavy", weight: 1 },
+                        { item: "heavy", weight: 2 },
                         { item: "shaky", weight: 2 },
                     ])].index;
                 }
@@ -16624,25 +16708,30 @@ li.select2-results__option[role=group] > strong:hover {
                         new PotentialFilterPoint(1.0, 0, midFreq, maxFreq, 8000.0, -1),
                     ]);
                     instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteFilterAllFreqs"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
-                        { item: "punch", weight: 6 },
+                        { item: "note size", weight: 2 },
+                        { item: "punch", weight: 2 },
                         { item: "flare 1", weight: 2 },
-                        { item: "flare 2", weight: 4 },
+                        { item: "flare 2", weight: 2 },
                         { item: "flare 3", weight: 2 },
                         { item: "twang 1", weight: 2 },
-                        { item: "twang 2", weight: 4 },
-                        { item: "twang 3", weight: 4 },
-                        { item: "swell 1", weight: 4 },
+                        { item: "twang 2", weight: 2 },
+                        { item: "twang 3", weight: 2 },
+                        { item: "swell 1", weight: 2 },
                         { item: "swell 2", weight: 2 },
-                        { item: "swell 3", weight: 1 },
-                        { item: "tremolo1", weight: 1 },
-                        { item: "tremolo2", weight: 1 },
-                        { item: "tremolo3", weight: 1 },
-                        { item: "tremolo4", weight: 1 },
-                        { item: "tremolo5", weight: 1 },
-                        { item: "tremolo6", weight: 1 },
-                        { item: "decay 1", weight: 1 },
+                        { item: "swell 3", weight: 2 },
+                        { item: "tremolo1", weight: 2 },
+                        { item: "tremolo2", weight: 2 },
+                        { item: "tremolo3", weight: 2 },
+                        { item: "tremolo4", weight: 2 },
+                        { item: "tremolo5", weight: 2 },
+                        { item: "tremolo6", weight: 2 },
+                        { item: "decay 1", weight: 2 },
                         { item: "decay 2", weight: 2 },
                         { item: "decay 3", weight: 2 },
+                        { item: "modbox trill", weight: 2 },
+                        { item: "modbox blip", weight: 2 },
+                        { item: "modbox click", weight: 2 },
+                        { item: "modbox bow", weight: 2 },
                     ])].index);
                 }
                 if (Math.random() < 0.1) {
@@ -16686,25 +16775,29 @@ li.select2-results__option[role=group] > strong:hover {
                             instrument.pulseWidth = selectCurvedDistribution(0, Config.pulseWidthRange - 1, Config.pulseWidthRange - 1, 2);
                             if (Math.random() < 0.6) {
                                 instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pulseWidth"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
-                                    { item: "punch", weight: 6 },
+                                    { item: "note size", weight: 2 },
+                                    { item: "punch", weight: 2 },
                                     { item: "flare 1", weight: 2 },
-                                    { item: "flare 2", weight: 4 },
+                                    { item: "flare 2", weight: 2 },
                                     { item: "flare 3", weight: 2 },
                                     { item: "twang 1", weight: 2 },
-                                    { item: "twang 2", weight: 4 },
-                                    { item: "twang 3", weight: 4 },
-                                    { item: "swell 1", weight: 4 },
+                                    { item: "twang 2", weight: 2 },
+                                    { item: "twang 3", weight: 2 },
+                                    { item: "swell 1", weight: 2 },
                                     { item: "swell 2", weight: 2 },
-                                    { item: "swell 3", weight: 1 },
-                                    { item: "tremolo1", weight: 1 },
-                                    { item: "tremolo2", weight: 1 },
-                                    { item: "tremolo3", weight: 1 },
-                                    { item: "tremolo4", weight: 1 },
-                                    { item: "tremolo5", weight: 1 },
-                                    { item: "tremolo6", weight: 1 },
-                                    { item: "decay 1", weight: 1 },
+                                    { item: "swell 3", weight: 2 },
+                                    { item: "tremolo1", weight: 2 },
+                                    { item: "tremolo2", weight: 2 },
+                                    { item: "tremolo3", weight: 2 },
+                                    { item: "tremolo4", weight: 2 },
+                                    { item: "tremolo5", weight: 2 },
+                                    { item: "tremolo6", weight: 2 },
+                                    { item: "decay 1", weight: 2 },
                                     { item: "decay 2", weight: 2 },
                                     { item: "decay 3", weight: 2 },
+                                    { item: "modbox trill", weight: 2 },
+                                    { item: "modbox blip", weight: 2 },
+                                    { item: "modbox click", weight: 2 },
                                 ])].index);
                             }
                         }
@@ -16780,25 +16873,25 @@ li.select2-results__option[role=group] > strong:hover {
                                 instrument.operators[i].frequency = selectCurvedDistribution(0, Config.operatorFrequencies.length - 1, 0, 3);
                                 instrument.operators[i].amplitude = selectCurvedDistribution(0, Config.operatorAmplitudeMax, Config.operatorAmplitudeMax - 1, 2);
                                 instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
-                                    { item: "sine", weight: 10 },
-                                    { item: "triangle", weight: 6 },
+                                    { item: "sine", weight: 3 },
+                                    { item: "triangle", weight: 3 },
                                     { item: "sawtooth", weight: 3 },
-                                    { item: "pulse width", weight: 6 },
+                                    { item: "pulse width", weight: 3 },
                                     { item: "ramp", weight: 3 },
-                                    { item: "trapezoid", weight: 4 },
+                                    { item: "trapezoid", weight: 3 },
                                 ])].index;
                                 if (instrument.operators[i].waveform == 3) {
                                     instrument.operators[i].pulseWidth = selectWeightedRandom([
                                         { item: 0, weight: 3 },
-                                        { item: 1, weight: 5 },
-                                        { item: 2, weight: 7 },
-                                        { item: 3, weight: 10 },
-                                        { item: 4, weight: 15 },
-                                        { item: 5, weight: 25 },
-                                        { item: 6, weight: 15 },
-                                        { item: 7, weight: 10 },
-                                        { item: 8, weight: 7 },
-                                        { item: 9, weight: 5 },
+                                        { item: 1, weight: 3 },
+                                        { item: 2, weight: 3 },
+                                        { item: 3, weight: 3 },
+                                        { item: 4, weight: 3 },
+                                        { item: 5, weight: 3 },
+                                        { item: 6, weight: 3 },
+                                        { item: 7, weight: 3 },
+                                        { item: 8, weight: 3 },
+                                        { item: 9, weight: 3 },
                                         { item: 9, weight: 3 },
                                     ]);
                                 }
@@ -16818,55 +16911,62 @@ li.select2-results__option[role=group] > strong:hover {
                                         { item: "swell 1", weight: 2 },
                                         { item: "swell 2", weight: 2 },
                                         { item: "swell 3", weight: 2 },
-                                        { item: "tremolo1", weight: 1 },
-                                        { item: "tremolo2", weight: 1 },
-                                        { item: "tremolo3", weight: 1 },
-                                        { item: "tremolo4", weight: 1 },
-                                        { item: "tremolo5", weight: 1 },
-                                        { item: "tremolo6", weight: 1 },
-                                        { item: "decay 1", weight: 1 },
-                                        { item: "decay 2", weight: 1 },
-                                        { item: "decay 3", weight: 1 },
+                                        { item: "tremolo1", weight: 2 },
+                                        { item: "tremolo2", weight: 2 },
+                                        { item: "tremolo3", weight: 2 },
+                                        { item: "tremolo4", weight: 2 },
+                                        { item: "tremolo5", weight: 2 },
+                                        { item: "tremolo6", weight: 2 },
+                                        { item: "decay 1", weight: 2 },
+                                        { item: "decay 2", weight: 2 },
+                                        { item: "decay 3", weight: 2 },
+                                        { item: "modbox trill", weight: 2 },
+                                        { item: "modbox blip", weight: 2 },
+                                        { item: "modbox click", weight: 2 },
+                                        { item: "modbox bow", weight: 2 },
                                     ])].index);
                                     instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
-                                        { item: "sine", weight: 10 },
-                                        { item: "triangle", weight: 6 },
+                                        { item: "sine", weight: 3 },
+                                        { item: "triangle", weight: 3 },
                                         { item: "sawtooth", weight: 3 },
-                                        { item: "pulse width", weight: 6 },
+                                        { item: "pulse width", weight: 3 },
                                         { item: "ramp", weight: 3 },
-                                        { item: "trapezoid", weight: 4 },
+                                        { item: "trapezoid", weight: 3 },
                                     ])].index;
                                     if (instrument.operators[i].waveform == 3) {
                                         instrument.operators[i].pulseWidth = selectWeightedRandom([
                                             { item: 0, weight: 3 },
-                                            { item: 1, weight: 5 },
-                                            { item: 2, weight: 7 },
-                                            { item: 3, weight: 10 },
-                                            { item: 4, weight: 15 },
-                                            { item: 5, weight: 25 },
-                                            { item: 6, weight: 15 },
-                                            { item: 7, weight: 10 },
-                                            { item: 8, weight: 7 },
-                                            { item: 9, weight: 5 },
+                                            { item: 1, weight: 3 },
+                                            { item: 2, weight: 3 },
+                                            { item: 3, weight: 3 },
+                                            { item: 4, weight: 3 },
+                                            { item: 5, weight: 3 },
+                                            { item: 6, weight: 3 },
+                                            { item: 7, weight: 3 },
+                                            { item: 8, weight: 3 },
+                                            { item: 9, weight: 3 },
                                             { item: 9, weight: 3 },
                                         ]);
                                     }
                                 }
                                 if (instrument.envelopeCount < Config.maxEnvelopeCount && Math.random() < 0.05) {
                                     instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["operatorFrequency"].index, i, Config.envelopes.dictionary[selectWeightedRandom([
-                                        { item: "punch", weight: 4 },
-                                        { item: "flare 1", weight: 4 },
+                                        { item: "punch", weight: 2 },
+                                        { item: "flare 1", weight: 2 },
                                         { item: "flare 2", weight: 2 },
-                                        { item: "flare 3", weight: 1 },
-                                        { item: "twang 1", weight: 16 },
+                                        { item: "flare 3", weight: 2 },
+                                        { item: "twang 1", weight: 2 },
                                         { item: "twang 2", weight: 2 },
-                                        { item: "twang 3", weight: 1 },
-                                        { item: "swell 1", weight: 4 },
+                                        { item: "twang 3", weight: 2 },
+                                        { item: "swell 1", weight: 2 },
                                         { item: "swell 2", weight: 2 },
-                                        { item: "swell 3", weight: 1 },
+                                        { item: "swell 3", weight: 2 },
                                         { item: "decay 1", weight: 2 },
-                                        { item: "decay 2", weight: 1 },
-                                        { item: "decay 3", weight: 1 },
+                                        { item: "decay 2", weight: 2 },
+                                        { item: "decay 3", weight: 2 },
+                                        { item: "modbox blip", weight: 2 },
+                                        { item: "modbox trill", weight: 2 },
+                                        { item: "modbox bow", weight: 2 },
                                     ])].index);
                                 }
                             }
@@ -16883,15 +16983,19 @@ li.select2-results__option[role=group] > strong:hover {
                                     { item: "swell 1", weight: 2 },
                                     { item: "swell 2", weight: 2 },
                                     { item: "swell 3", weight: 2 },
-                                    { item: "tremolo1", weight: 1 },
-                                    { item: "tremolo2", weight: 1 },
-                                    { item: "tremolo3", weight: 1 },
-                                    { item: "tremolo4", weight: 1 },
-                                    { item: "tremolo5", weight: 1 },
-                                    { item: "tremolo6", weight: 1 },
-                                    { item: "decay 1", weight: 1 },
-                                    { item: "decay 2", weight: 1 },
-                                    { item: "decay 3", weight: 1 },
+                                    { item: "tremolo1", weight: 2 },
+                                    { item: "tremolo2", weight: 2 },
+                                    { item: "tremolo3", weight: 2 },
+                                    { item: "tremolo4", weight: 2 },
+                                    { item: "tremolo5", weight: 2 },
+                                    { item: "tremolo6", weight: 2 },
+                                    { item: "decay 1", weight: 2 },
+                                    { item: "decay 2", weight: 2 },
+                                    { item: "decay 3", weight: 2 },
+                                    { item: "modbox trill", weight: 2 },
+                                    { item: "modbox blip", weight: 2 },
+                                    { item: "modbox click", weight: 2 },
+                                    { item: "modbox bow", weight: 2 },
                                 ])].index);
                             }
                         }
@@ -27248,7 +27352,7 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "tempo":
                     {
-                        message = div$d(h2$d("Song Tempo"), p$4("This setting controls the speed of your song, measured in beats-per-minute. A \"beat\" is the duration of the little gray rectangles in the pattern editor. (In conventional music notation, a \"quarter note\" is usually equivalent to \"beat\".)"));
+                        message = div$d(h2$d("Song Tempo"), p$4("This setting controls the speed of your song, measured in beats-per-minute. A \"beat\" is the duration of the little gray rectangles in the pattern editor. (In conventional music notation, a \"quarter note\" is usually equivalent to \"beat\".)"), p$4("Tip: Alternating between two different tempos using a mod channel can create rhythm too! This can allow for easily creating songs with swing."));
                     }
                     break;
                 case "reverb":
@@ -27263,17 +27367,17 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "instrumentIndex":
                     {
-                        message = div$d(h2$d("Instrument Number"), p$4("In the \"Channel Settings\" option from JummBox's \"File\" menu, there are a few ways to enable multiple instruments per channel."), p$4("First, you could enable multiple simultaneous instruments per channel. All of the channel's instruments will play all of the notes in the channel at the same time, and you can click an instrument number to view and edit its settings."), p$4("Second, you could enable different instruments per pattern. Only one of the instruments will play at any given time, but you can click the instrument number to change which instrument is used for the currently selected pattern(s)."), p$4("Finally, you can enable them both, in which case you can click an instrument number once to view it, and again to toggle whether the instrument is used for the currently selected pattern(s)."), p$4("Either way, you can click the + button to add more instruments to a channel, and you can press shift and a number key on your keyboard to select an instrument as if you had clicked the corresponding button here."));
+                        message = div$d(h2$d("Instrument Number"), p$4("In the \"Channel Settings\" option from Midbox's \"File\" menu (If you are using keyboard, the keybind would be Q.), there are a few ways to enable multiple instruments per channel."), p$4("First, you could enable multiple simultaneous instruments per channel. All of the channel's instruments will play all of the notes in the channel at the same time, and you can click an instrument number to view and edit its settings."), p$4("Second, you could enable different instruments per pattern. Only one of the instruments will play at any given time, but you can click the instrument number to change which instrument is used for the currently selected pattern(s)."), p$4("Finally, you can enable them both, in which case you can click an instrument number once to view it, and again to toggle whether the instrument is used for the currently selected pattern(s)."), p$4("Either way, you can click the + button to add more instruments to a channel, and you can press shift and a number key on your keyboard to select an instrument as if you had clicked the corresponding button here."));
                     }
                     break;
                 case "instrumentVolume":
                     {
-                        message = div$d(h2$d("Instrument Volume"), p$4("This setting controls the volume of the selected instrument without affecting the volume of the other instruments. This allows you to balance the loudness of each instrument relative to each other."), p$4("Please be careful when using volume settings above 0. This indicates amplification and too much of that can trip the audio limiter built into this tool. This can lead to your song sounding muffled if overused. But when used carefully, amplification can be a powerful tool!"));
+                        message = div$d(h2$d("Instrument Volume"), p$4("This setting controls the volume of the selected instrument without affecting the volume of the other instruments. This allows you to balance the loudness of each instrument relative to each other."), p$4("Please be careful when using volume settings above 0. This indicates amplification and too much of that can trip the audio limiter built into this tool. This can lead to your song sounding muffled if overused. But when used carefully, amplification can be a powerful tool!"), p$4("Here is a small tip from Mid himself for mixing: Refrain from having any instrument's volume from being above 10, and keep every instrument volume around 0 for the best results. If your song doesn't sound loud enough, you can press Shift + L if you are on keyboard, or got to files > limiter settings to open up the limiter settings. This is a very powerful mixing tool to help mix your songs with more potency. Mess with the master gain to give a boost to your song volume."));
                     }
                     break;
                 case "pan":
                     {
-                        message = div$d(h2$d("Instrument Panning"), p$4("If you're listening through headphones or some other stereo sound system, this controls the position of the instrument and where the sound is coming from, ranging from left to right."), p$4("As a suggestion, composers often put lead melodies, drums, and basses in the center, and spread other instruments toward either side. If too many instruments seem like they're coming from the same place, it can feel crowded and harder to distinguish individual sounds, especially if they cover a similar pitch range."));
+                        message = div$d(h2$d("Instrument Panning"), p$4("If you're listening through headphones or some other stereo sound system, this controls the position of the instrument and where the sound is coming from, ranging from left to right."), p$4("As a suggestion, composers often put lead melodies, drums, and basses in the center, and spread other instruments toward either side. If too many instruments seem like they're coming from the same place, it can feel crowded and harder to distinguish individual sounds, especially if they cover a similar pitch range."), p$4("Tip: If you have multiple of the same instrument, it is best to use panning to spread them out. You may also use panning to grab the feeling that a sound or ambience is coming from a certain direction, which, if performed correctly, can sound great."));
                     }
                     break;
                 case "panDelay":
@@ -27283,7 +27387,7 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "arpeggioSpeed":
                     {
-                        message = div$d(h2$d("Arpeggio Speed"), p$4("This setting affects how fast your chord will 'arpeggiate', or cycle between notes. With a fast arpeggio speed it will sound rapid-fire, with a slow speed you can hear each note one after another."));
+                        message = div$d(h2$d("Arpeggio Speed"), p$4("This setting affects how fast your chord will 'arpeggiate', or cycle between notes. With a fast arpeggio speed it will sound rapid-fire, with a slow speed you can hear each note one after another. If you maintain the arpeggio at a relatively slow pace, you could even lay them out like a normal melody! Although, don't do this. It is very impractical."));
                     }
                     break;
                 case "twoNoteArpeggio":
@@ -27293,57 +27397,57 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "detune":
                     {
-                        message = div$d(h2$d("Detune"), p$4("This setting can be used to finely control the pitch of your instrument. It is in units of 'cents', 100 of which equal a pitch shift of one semitone."), p$4("Careful - you can quickly get very dissonant sounding songs by using this setting."));
+                        message = div$d(h2$d("Detune"), p$4("This setting can be used to finely control the pitch of your instrument. It is in units of 'cents', 100 of which equal a pitch shift of one semitone."), p$4("Careful - you can quickly get very dissonant sounding songs by using this setting. If used well, you can detune your whole song and give it a whole new vibe! If used very slightly, it can give your instrument a shimmer effect with other instruments around that very amount of cents."));
                     }
                     break;
                 case "instrumentType":
                     {
-                        message = div$d(h2$d("Instrument Type"), p$4("JummBox comes with many instrument presets, try them out! You can also create your own custom instruments!"), p$4("There are also options for copying and pasting instrument settings and for generating random instruments at the top of the instrument type menu."));
+                        message = div$d(h2$d("Instrument Type"), p$4("Midbox comes with many instrument presets, try them out! You can also create your own custom instruments!"), p$4("There are also options for copying and pasting instrument settings and for generating random instruments at the top of the instrument type menu. Get a feel of what every setting changes before you start attempting to master instrument design however."), p$4("There are seven types of instrument types. Chip Wave is the most basic one. It consists of a certain waveform, and a unison. Custom Chip is a bit similar, but you get to create your own waveform!"), p$4("Harmonics is a series of sine waves combined at multiple frequencies. Harmonics is commonly used for string-like instruments, and Picked String uses harmonics with a sustain to help build such sounds faster. This instrument type also comes with a unison."), p$4("Pulse Width uses a pulse, like a square wave, and that pulse's duration can be configured manually."), p$4("Spectrum is an instrument type that makes sounds more for drums, wind, and vocals. It obviously, uses a spectrum to do this."), p$4("Finally, there is FM. It's a very complex instrument type that consists of waveforms at different frequencies with those waveforms having the ability to operated theirself. This instrument was used a lot by old consoles like the Sega Genisis."));
                     }
                     break;
                 case "eqFilter":
                     {
-                        message = div$d(h2$d("EQ Filter"), p$4("Filters are a way of emphasizing or diminishing different parts of a sound. Musical notes have a fundamental (base) frequency, but the sound of a musical note also has parts at higher frequencies and filters can adjust the volume of each of these parts based on their frequency."), p$4("Click in the filter editor to insert, delete, or drag a filter control point. The horizontal position of the point determines which frequencies it affects, and the vertical position determines how the volume is affected at that frequency."), p$4("Insert a new point on the left side of the filter editor to add a \"high-pass\" filter point, which additionally reduces the volume of lower frequencies, or insert a new point on the right side to add a \"low-pass\" filter point which reduces the volume of higher frequencies."), p$4("You can also enable a \"Note Filter\" as an effect. EQ and note filters are mostly the same, but have different purposes. EQ filters are for overall adjustments, whereas note filters are for dynamic control and can be moved with envelopes. Note filters also change how the distortion effect sounds."));
+                        message = div$d(h2$d("EQ Filter"), p$4("Filters are a way of emphasizing or diminishing different parts of a sound. Musical notes have a fundamental (base) frequency, but the sound of a musical note also has parts at higher frequencies and filters can adjust the volume of each of these parts based on their frequency."), p$4("Click in the filter editor to insert, delete, or drag a filter control point. The horizontal position of the point determines which frequencies it affects, and the vertical position determines how the volume is affected at that frequency."), p$4("Insert a new point on the left side of the filter editor to add a \"high-pass\" filter point, which additionally reduces the volume of lower frequencies, or insert a new point on the right side to add a \"low-pass\" filter point which reduces the volume of higher frequencies."), p$4("You can also enable a \"Note Filter\" as an effect. EQ and note filters are mostly the same, but have different purposes. EQ filters are for overall adjustments, whereas note filters are for dynamic control and can be moved with envelopes. Note filters also change how the distortion effect sounds."), p$4("Tip: If say, one of your instruments are too loud, yet when you turn down the volume, the best parts of that instrument are too silent, you can put a point on the EQ filter to decrease the volume of the loud part, while keeping that juicy part at normal volume. If you are on keyboard, press Shift + E to open an enhanced view of the EQ filter."));
                     }
                     break;
                 case "noteFilter":
                     {
-                        message = div$d(h2$d("Note Filter"), p$4("Note filters are mostly the same as EQ filters, but have a different purpose. EQ filters are for overall adjustments, whereas note filters are for dynamic control and can be moved with envelopes. Note filters also change how the distortion effect sounds."), p$4("Filters are a way of emphasizing or diminishing different parts of a sound. Musical notes have a fundamental (base) frequency, but the sound of a musical note also has parts at higher frequencies and filters can adjust the volume of each of these parts based on their frequency."), p$4("Click in the filter editor to insert, delete, or drag a filter control point. The horizontal position of the point determines which frequencies it affects, and the vertical position determines how the volume is affected at that frequency."), p$4("Insert a new point on the left side of the filter editor to add a \"high-pass\" filter point, which additionally reduces the volume of lower frequencies, or insert a new point on the right side to add a \"low-pass\" filter point which reduces the volume of higher frequencies."));
+                        message = div$d(h2$d("Note Filter"), p$4("Note filters are mostly the same as EQ filters, but have a different purpose. EQ filters are for overall adjustments, whereas note filters are for dynamic control and can be moved with envelopes. Note filters also change how the distortion effect sounds."), p$4("Filters are a way of emphasizing or diminishing different parts of a sound. Musical notes have a fundamental (base) frequency, but the sound of a musical note also has parts at higher frequencies and filters can adjust the volume of each of these parts based on their frequency."), p$4("Click in the filter editor to insert, delete, or drag a filter control point. The horizontal position of the point determines which frequencies it affects, and the vertical position determines how the volume is affected at that frequency."), p$4("Insert a new point on the left side of the filter editor to add a \"high-pass\" filter point, which additionally reduces the volume of lower frequencies, or insert a new point on the right side to add a \"low-pass\" filter point which reduces the volume of higher frequencies."), p$4("Tip: Note filters can also make interesting noises when combined with bit crush and frequency crush effects. If you create an envelope that changes the note filter points by note size, and then add a low-pass point somewhere between the top left and top center of the note filter hud, you can create dubstep-like sounds by using note size. If you are on keyboard and have the effect enabled, press Shift + N to open an enhanced view of the note filter."));
                     }
                     break;
                 case "fadeInOut":
                     {
-                        message = div$d(h2$d("Fade In/Out"), p$4("This setting controls how long it takes for notes to reach full volume at the beginning or decay to silence at the end."), p$4("An instant fade-in sounds like instruments that are played by hitting or plucking, whereas slower fade-ins sound like instruments that are played by blowing air."), p$4("You can also make the fade-out start before the note ends to leave a gap before the next note starts, or after the note ends to allow the sound of the end of the note to overlap with the start of the next note."));
+                        message = div$d(h2$d("Fade In/Out"), p$4("This setting controls how long it takes for notes to reach full volume at the beginning or decay to silence at the end."), p$4("An instant fade-in sounds like instruments that are played by hitting or plucking, whereas slower fade-ins sound like instruments that are played by blowing air."), p$4("You can also make the fade-out start before the note ends to leave a gap before the next note starts, or after the note ends to allow the sound of the end of the note to overlap with the start of the next note."), p$4("Tip: Be mindful on how transitions work, for if you connect a row of notes together and enable a seamless transition like continue, the fade in/outs will no long take effect until after the chain of notes when no notes connect."));
                     }
                     break;
                 case "transition":
                     {
-                        message = div$d(h2$d("Transition"), p$4("Usually, when one note ends at the same time another begins, the old note will fade out and the new note will fade in based on the fade in/out settings, but this setting can override that, connecting the end of one note to the beginning of the next."), p$4("The \"interrupt\" transition makes the wave suddenly change from the old note's frequency to the new note's frequency without any fading, but still restarts envelopes at the beginning of the new note. The \"continue\" transition is similar but it doesn't even restart envelopes, and can be used to make each of the notes in a chord start or stop at different times!"), p$4("The \"slide\" transition makes the pitch shift quickly but not instantaneously from the old note's frequency to the new note's frequency, and softly restarts envelopes. The \"slide in pattern\" transition is the same except it doesn't connect the last note in a pattern to the first note in the next pattern."));
+                        message = div$d(h2$d("Transition"), p$4("Usually, when one note ends at the same time another begins, the old note will fade out and the new note will fade in based on the fade in/out settings, but this setting can override that, connecting the end of one note to the beginning of the next."), p$4("The \"interrupt\" transition makes the wave suddenly change from the old note's frequency to the new note's frequency without any fading, but still restarts envelopes at the beginning of the new note. The \"continue\" transition is similar but it doesn't even restart envelopes, and can be used to make each of the notes in a chord start or stop at different times!"), p$4("The \"slide\" transition makes the pitch shift quickly but not instantaneously from the old note's frequency to the new note's frequency, and softly restarts envelopes. The \"slide in pattern\" transition is the same except it doesn't connect the last note in a pattern to the first note in the next pattern."), p$4("The \"insta-slide\" transition is similar to slide, but slides across one note to another almost simultaneously, and the \"continue in pattern\" transition is like a combo of slide in pattern and continue, but the continue effect ends at the end of a pattern."));
                     }
                     break;
                 case "chipWave":
                     {
-                        message = div$d(h2$d("Chip Wave"), p$4("JummBox comes with some sound waves based on classic electronic sound chips, as well as several unique waves. This is the basic source of the sound of the instrument, which is modified by the other instrument settings."));
+                        message = div$d(h2$d("Chip Wave"), p$4("Midbox comes with some sound waves based on classic electronic sound chips, as well as several unique waves. This is the basic source of the sound of the instrument, which is modified by the other instrument settings."), p$4("Take note that if you want completely accurate waves that aren't chips, you can use the FM ones for more perfect sounds."));
                     }
                     break;
                 case "chipNoise":
                     {
-                        message = div$d(h2$d("Noise"), p$4("JummBox comes with several basic noise sounds. These do not have any distinct musical pitch, and can be used like drums to create beats and emphasize your song's rhythm."));
+                        message = div$d(h2$d("Noise"), p$4("Midbox comes with several basic noise sounds. These do not have any distinct musical pitch, and can be used like drums to create beats and emphasize your song's rhythm."), p$4("Fun fact: Each placement in the drum channel slots is 6 pitches above the one below it."));
                     }
                     break;
                 case "pulseWidth":
                     {
-                        message = div$d(h2$d("Pulse Wave Width"), p$4("This setting controls the shape and sound of a pulse wave. At the minimum width, it sounds light and buzzy. At the maximum width, it is shaped like a classic square wave."));
+                        message = div$d(h2$d("Pulse Wave Width"), p$4("This setting controls the shape and sound of a pulse wave. At the minimum width, it sounds light and buzzy. At the maximum width, it is shaped like a classic square wave. Add some envelopes to manipulate the pulse width based on note size to manually be able to make chiptune-ish songs!"));
                     }
                     break;
                 case "unison":
                     {
-                        message = div$d(h2$d("Unison"), p$4("This instrument can play two identical waves at different frequencies. When two waves play at slightly different frequencies, they move in and out of phase with each other over time as different parts of the waves line up. This creates a dynamic, shifting sound. Pianos are a common example of this kind of sound, because each piano key strikes multiple strings that are tuned to slightly different frequencies."), p$4("The distance between two frequencies is called an \"interval\", and this setting controls how large it is. If the interval is too wide, then the waves may sound out-of-tune and \"dissonant\". However, if the interval is even larger, then the two frequencies can even be distinct pitches."));
+                        message = div$d(h2$d("Unison"), p$4("This instrument can play two identical waves at different frequencies. When two waves play at slightly different frequencies, they move in and out of phase with each other over time as different parts of the waves line up. This creates a dynamic, shifting sound. Pianos are a common example of this kind of sound, because each piano key strikes multiple strings that are tuned to slightly different frequencies."), p$4("The distance between two frequencies is called an \"interval\", and this setting controls how large it is. If the interval is too wide, then the waves may sound out-of-tune and \"dissonant\". However, if the interval is even larger, then the two frequencies can even be distinct pitches. A unison may also be offset, which allows it to sound like entirely different pitches when compared to no unison."));
                     }
                     break;
                 case "chords":
                     {
-                        message = div$d(h2$d("Chords"), p$4("When multiple different notes occur at the same time, this is called a chord. Chords can be created in JummBox's pattern editor by adding notes above or below another note."), p$4("This setting determines how chords are played. The standard option is \"simultaneous\" which starts playing all of the pitches in a chord at the same instant. The \"strum\" option is similar, but plays the notes starting at slightly different times. The \"arpeggio\" option is used in \"chiptune\" style music and plays a single tone that rapidly alternates between all of the pitches in the chord."), p$4("Some JummBox instruments have an option called \"custom interval\" which uses the chord notes to control the interval between the waves of a single tone. This can create strange sound effects when combined with FM modulators."));
+                        message = div$d(h2$d("Chords"), p$4("When multiple different notes occur at the same time, this is called a chord. Chords can be created in Midbox's pattern editor by adding notes above or below another note."), p$4("This setting determines how chords are played. The standard option is \"simultaneous\" which starts playing all of the pitches in a chord at the same time. The \"strum\" option is similar, but plays the notes starting at slightly different times. Midbox currently offers a bunch of different strum settings that strum at different speeds and even different rhythms. Soon, these may be removed and replaced with a custom strum slider similar to the custom arpeggio one. The \"arpeggio\" option is used in chiptune style music and plays a single tone that rapidly alternates between all of the pitches in the chord. This setting may also be customized to your favor."), p$4("Some Midbox instruments have an option called \"custom interval\" which uses the chord notes to control the interval between the waves of a single tone. This can create strange sound effects when combined with FM modulators."));
                     }
                     break;
                 case "vibrato":
@@ -27368,12 +27472,12 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "vibratoType":
                     {
-                        message = div$d(h2$d("Vibrato Type"), p$4("This determines the way vibrato causes your instrument's pitch to wobble. The normal type is smooth up and down, the shaky type is chaotic."));
+                        message = div$d(h2$d("Vibrato Type"), p$4("This determines the way vibrato causes your instrument's pitch to wobble. The normal type is a smooth up and down, the shaky type is chaotic."), p$4("Tip: When making wind sounds, you should enable the shaky vibrato type, along with slow vibrato speed and moderate-high vibrato depth."));
                     }
                     break;
                 case "algorithm":
                     {
-                        message = div$d(h2$d("FM Algorithm"), p$4('FM Synthesis is a mysterious but powerful technique for crafting sounds, popularized by Yamaha keyboards and the Sega Genesis/Mega Drive. It may seem confusing, but try playing around with the options until you get a feel for it, or check out some of the preset examples!'), p$4('This FM synthesizer uses up to four waves, numbered 1, 2, 3, and 4. Each wave may have its own frequency and volume.'), p$4('There are two kinds of waves: "carrier" waves play a tone out loud, but "modulator" waves distort other waves instead. Wave 1 is always a carrier and plays a tone, but other waves may distort it. The "Algorithm" setting determines which waves are modulators, and which other waves those modulators distort. For example, "1←2" means that wave 2 modulates wave 1, and wave 1 plays out loud.'));
+                        message = div$d(h2$d("FM Algorithm"), p$4('FM Synthesis is a mysterious but powerful technique for crafting sounds, popularized by Yamaha keyboards and the Sega Genesis/Mega Drive. It may seem confusing, but try playing around with the options until you get a feel for it, or check out some of the preset examples!'), p$4('This FM synthesizer uses up to four waves, numbered 1, 2, 3, and 4. Each wave may have its own frequency and volume.'), p$4('There are two kinds of waves: "carrier" waves play a tone out loud, but "modulator" waves distort other waves instead. Wave 1 is always a carrier and plays a tone, but other waves may distort it. The "Algorithm" setting determines which waves are modulators, and which other waves those modulators distort. For example, "1←2" means that wave 2 modulates wave 1, and wave 1 plays out loud.'), p$4('Tip: I would suggest playing around with FM presets like the synth kick to get a feel of what setting makes that instrument do what it does.'));
                     }
                     break;
                 case "feedbackType":
@@ -27398,17 +27502,17 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "spectrum":
                     {
-                        message = div$d(h2$d("Spectrum"), p$4("This setting allows you to draw your own noise spectrum! This is good for making drum sounds."), p$4("If you only use certain frequencies and a soft fade in/out, it's also possible to make howling wind sounds or even musical wind instruments."), p$4("The left side of the spectrum editor controls the noise energy at lower frequencies, and the right side controls higher frequencies."));
+                        message = div$d(h2$d("Spectrum"), p$4("This setting allows you to draw your own noise spectrum! This is good for making drum sounds."), p$4("If you only use certain frequencies and a soft fade in/out, it's also possible to make howling wind sounds or even musical wind instruments."), p$4("The left side of the spectrum editor controls the noise energy at lower frequencies, and the right side controls higher frequencies."), p$4("Adding effects to the spectrum usually has really cool effects. Try plotting out your own spectrum and then putting heavy distortion on it!"));
                     }
                     break;
                 case "harmonics":
                     {
-                        message = div$d(h2$d("Harmonics"), p$4("This setting allows you to design your own sound wave! Most musical waves are actually a combination of sine waves at certain frequencies, and this lets you control the volume of each sine wave individually."), p$4("The left side of the harmonics editor controls the sine wave volumes at lower frequencies, and the right side controls higher frequencies."));
+                        message = div$d(h2$d("Harmonics"), p$4("This setting allows you to design your own sound wave! Most musical waves are actually a combination of sine waves at certain frequencies, and this lets you control the volume of each sine wave individually."), p$4("The left side of the harmonics editor controls the sine wave volumes at lower frequencies, and the right side controls higher frequencies."), p$4("This instrument is more powerful when trying to make instruments such as pianos, bells, and picked string instruments."));
                     }
                     break;
                 case "effects":
                     {
-                        message = div$d(h2$d("Effects"), p$4("JummBox has many different kinds of special effects you can add to instruments. You can turn on multiple effects at once, and they can be configured individually. Try them all out!"));
+                        message = div$d(h2$d("Effects"), p$4("Midbox has many different kinds of special effects you can add to instruments. You can turn on multiple effects at once, and they can be configured individually. Try them all out!"));
                     }
                     break;
                 case "drumsetEnvelope":
@@ -27438,32 +27542,32 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "pitchShift":
                     {
-                        message = div$d(h2$d("Pitch Shift"), p$4("This setting makes instruments play higher or lower pitches than the ones displayed in the pattern editor. Be careful that you don't confuse yourself!"), p$4("You can combine this with envelopes to bend pitch over time, or play multiple simultaneous instruments with different pitch shifts for interesting layered sounds."), p$4("The intervals created by this setting are in \"just intonation\" which means they stay in phase with the original pitch instead of shifting in and out of phase over time. If you want the shifting, add the detune effect!"));
+                        message = div$d(h2$d("Pitch Shift"), p$4("This setting makes instruments play higher or lower pitches than the ones displayed in the pattern editor. Be careful that you don't confuse yourself!"), p$4("You can combine this with envelopes to bend pitch over time, or play multiple simultaneous instruments with different pitch shifts for interesting layered sounds."), p$4("The intervals created by this setting are in \"just intonation\" which means they stay in phase with the original pitch instead of shifting in and out of phase over time. If you want the shifting, add the detune effect!"), p$4("The range of the pitch shift bar goes from -1 octave [-12 semitones] at the very left side of the bar, and +1 octave [+12 semitones] at the very right. The very middle of the bar is the default pitch. If you want to change the key of more than one of your instruments at once, try song key!"));
                     }
                     break;
                 case "detune":
                     {
-                        message = div$d(h2$d("Detune"), p$4("This setting slightly adjusts the frequency of notes played by the instrument. You can use a little bit to add a pleasing shifting sound similar to the \"unison\" feature when combined with other instruments. If you use too much, then the instrument may sound unpleasantly out-of-tune."));
+                        message = div$d(h2$d("Detune"), p$4("This setting slightly adjusts the frequency of notes played by the instrument. You can use a little bit to add a pleasing shifting sound similar to the \"unison\" feature when combined with other instruments. If you use too much, then the instrument may sound unpleasantly out-of-tune. This setting can also, when appiled to the grand majority of instruments, change the feel of your song, even if ever so slightly."));
                     }
                     break;
                 case "distortion":
                     {
-                        message = div$d(h2$d("Distortion"), p$4("This is the famous electric guitar effect! However, there are some things to be aware of."), p$4("First, most chords don't sound right when combined with heavy distortion. The only chords commonly used with distorted electric guitars are \"power chords\" which consist of a root note, a \"fifth\" note above that, and/or any octaves of those two notes."), p$4("Second, the distortion sound depends a lot on filtering. In particular, I recommend enabling the note filter effect, and adding both high-pass and low-pass points to the note filter. (Note filters are applied first, then distortion which transforms the sound based on that filtering, then the EQ filter is applied last.)"), p$4("Finally, I recommend adjusting the fade-out setting to allow the end of each note to overlap a little bit with the beginning of the next, but not too much!"));
+                        message = div$d(h2$d("Distortion"), p$4("This is the famous electric guitar effect! However, there are some things to be aware of."), p$4("First, most chords don't sound right when combined with heavy distortion, nor heavy bit/freq crush. The only chords commonly used with distorted electric guitars are \"power chords\" which consist of a root note, a \"fifth\" note above that, and/or any octaves of those two notes."), p$4("Second, the distortion sound depends a lot on filtering. In particular, I recommend enabling the note filter effect, and adding both high-pass and low-pass points to the note filter. (Note filters are applied first, then distortion which transforms the sound based on that filtering, then the EQ filter is applied last.)"), p$4("Finally, I recommend adjusting the fade-out setting to allow the end of each note to overlap a little bit with the beginning of the next, but not too much!"));
                     }
                     break;
                 case "bitcrusherQuantization":
                     {
-                        message = div$d(h2$d("Bitcrusher Quantization"), p$4("This effect makes stuff sounds harsher, artificial, and \"low quality\", which is great if that's what you're going for!"));
+                        message = div$d(h2$d("Bitcrusher Quantization"), p$4("This effect makes stuff sounds harsher, artificial, and \"low quality\", which is great if that's what you're going for! Combine this effect with a bunch of low-pass points gathered on the top left of a note filter, and you can create dynamic sounds based on which pitch the instrument is."));
                     }
                     break;
                 case "bitcrusherFreq":
                     {
-                        message = div$d(h2$d("Frequency Quantization"), p$4("The bitcrusher effect comes with an additional frequency quantization effect! This is a fun one to play with, especially when combined with the note filter effect."), p$4("Every other notch on this slider is aligned with the currently selected key of the song, and the in-between notches are aligned with the tritones of the key."));
+                        message = div$d(h2$d("Frequency Quantization"), p$4("The bitcrusher effect comes with an additional frequency quantization effect! This is a fun one to play with, especially when combined with the note filter effect."), p$4("Every other notch on this slider is aligned with the currently selected key of the song, and the in-between notches are aligned with the tritones of the key. High amounts of this settings will typically make your instrument sound more retro, but don't always expect the same results!"));
                     }
                     break;
                 case "stringSustain":
                     {
-                        message = div$d(h2$d("String sustain"), p$4("This setting controls how quickly the picked string vibration decays."), p$4("Unlike most of BeepBox's instrument synthesizer features, a picked string cannot change frequency suddenly while maintaining its decay. If a tone's pitch changes suddenly (e.g. if the chord type is set to \"arpeggio\" or the transition type is set to \"continues\") then the string will be re-picked and start decaying from the beginning again, even if the envelopes don't otherwise restart."));
+                        message = div$d(h2$d("String sustain"), p$4("This setting controls how quickly the picked string vibration decays."), p$4("Unlike most of Midbox's instrument synthesizer features, a picked string cannot change frequency suddenly while maintaining its decay. If a tone's pitch changes suddenly (e.g. if the chord type is set to \"arpeggio\" or the transition type is set to \"continues\") then the string will be re-picked and start decaying from the beginning again, even if the envelopes don't otherwise restart."));
                     }
                     break;
                 case "envelopes":
@@ -27483,7 +27587,7 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "modChannel":
                     {
-                        message = div$d(h2$d("Modulator Channel"), p$4("Modulators can be used to change settings in your song automatically over time. This technique is also known as automation."), p$4("This setting controls which channel the modulators will take effect for. If you choose 'Song', you can change song-wide settings too!"));
+                        message = div$d(h2$d("Modulator Channel"), p$4("Modulators can be used to change settings in your song automatically over time. This technique is also known as automation."), p$4("This setting controls which channel the modulators will take effect for. If you choose 'Song', you can change song-wide settings too!"), p$4("There are a max of 6 slots. Each slot can be assigned to a different instrument and one of it's settings, or the song and one of it's settings. If the note appears neon-colored, that means that your mod channel's selection is currently doing an action. If the note is gray, that means that the mod channel cannot find the setting/doesn't have any setting selected to automate. When making a change between instruments, sometimes the setting box will be surrounded with a red line. This means that the selected instrument does not have that setting, and thus cannot be used until swapped."));
                     }
                     break;
                 case "modInstrument":
@@ -27513,12 +27617,12 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "aliases":
                     {
-                        message = div$d(h2$d("Aliasing"), p$4("JummBox applies a technique called 'anti-aliasing' to instruments normally to help them sound cleaner even at high frequencies and low sample rates."), p$4("When this setting is ticked that technique is disabled, so you may hear strange audio artifacts especially at high pitches and when bending notes. However, this can lend a grungy sound to an instrument that could be desirable."));
+                        message = div$d(h2$d("Aliasing"), p$4("Midbox applies a technique called 'anti-aliasing' to instruments normally to help them sound cleaner even at high frequencies and low sample rates."), p$4("When this setting is ticked that technique is disabled, so you may hear strange audio artifacts especially at high pitches and when bending notes. However, this can lend a grungy sound to an instrument that could be desirable."));
                     }
                     break;
                 case "operatorWaveform":
                     {
-                        message = div$d(h2$d("Operator Waveform"), p$4('This setting controls the what kind of sound wave an individual FM wave uses. By defualt the FM synth only uses sinewaves.'), p$4('This feature was ported from Aury system`s GoldBox!'));
+                        message = div$d(h2$d("Operator Waveform"), p$4('This setting controls the what kind of sound wave an individual FM wave uses. By defualt, the FM synth only uses sinewaves.'), p$4('This feature was ported from Aury System`s GoldBox!'));
                     }
                     break;
                 case "filterType":
@@ -27528,7 +27632,7 @@ You should be redirected to the song at:<br /><br />
                     break;
                 case "filterCutoff":
                     {
-                        message = div$d(h2$d("Low-Pass Filter Cutoff Frequency"), p$4("The lowest setting feels \"muffled\" or \"dark\", and the highest setting feels \"harsh\" or \"bright\"."), p$4("Most sounds include a range of frequencies from low to high. JummBox instruments have a filter that allows the lowest frequencies to pass through at full volume, but can reduce the volume of the higher frequencies that are above a cutoff frequency. This setting controls the cutoff frequency and thus the range of higher frequencies that are reduced."), p$4("This cutoff setting also determines which frequency resonates when the resonance peak setting is used."));
+                        message = div$d(h2$d("Low-Pass Filter Cutoff Frequency"), p$4("The lowest setting feels \"muffled\" or \"dark\", and the highest setting feels \"harsh\" or \"bright\"."), p$4("Most sounds include a range of frequencies from low to high. Midbox instruments have a filter that allows the lowest frequencies to pass through at full volume, but can reduce the volume of the higher frequencies that are above a cutoff frequency. This setting controls the cutoff frequency and thus the range of higher frequencies that are reduced."), p$4("This cutoff setting also determines which frequency resonates when the resonance peak setting is used."));
                     }
                     break;
                 case "filterResonance":
@@ -28262,7 +28366,7 @@ You should be redirected to the song at:<br /><br />
             this._defs = SVG.defs({}, this._gradient);
             this._volumeBarContainer = SVG.svg({ style: `touch-action: none; overflow: visible; margin: auto; max-width: 20vw;`, width: "160px", height: "100%", preserveAspectRatio: "none", viewBox: "0 0 160 12" }, this._defs, this._outVolumeBarBg, this._outVolumeBar, this._outVolumeCap);
             this._volumeBarBox = div$e({ class: "playback-volume-bar", style: "height: 12px; align-self: center;" }, this._volumeBarContainer);
-            this._fileMenu = select$7({ style: "width: 100%;" }, option$7({ selected: true, disabled: true, hidden: false }, "File"), option$7({ value: "new" }, "+ New Blank Song"), option$7({ value: "import" }, "↑ Import Song... (" + EditorConfig.ctrlSymbol + "O)"), option$7({ value: "export" }, "↓ Export Song... (" + EditorConfig.ctrlSymbol + "S)"), option$7({ value: "copyUrl" }, "⎘ Copy Song URL"), option$7({ value: "shareUrl" }, "⤳ Share Song URL"), option$7({ value: "shortenUrl" }, "… Shorten Song URL"), option$7({ value: "viewPlayer" }, "▶ View in Song Player"), option$7({ value: "copyEmbed" }, "⎘ Copy HTML Embed Code"), option$7({ value: "songRecovery" }, "⚠ Recover Recent Song..."));
+            this._fileMenu = select$7({ style: "width: 100%;" }, option$7({ selected: true, disabled: true, hidden: false }, "File"), option$7({ value: "new" }, "+ New Blank Song"), option$7({ value: "import" }, "↑ Import Song... (" + EditorConfig.ctrlSymbol + "O)"), option$7({ value: "export" }, "↓ Export Song... (" + EditorConfig.ctrlSymbol + "S)"), option$7({ value: "copyUrl" }, "⎘ Copy Song URL"), option$7({ value: "shareUrl" }, "⤳ Share Song URL"), option$7({ value: "shortenUrl" }, "… Shorten Song URL"), option$7({ value: "viewPlayer" }, "▶ View in Song Player (P)"), option$7({ value: "copyEmbed" }, "⎘ Copy HTML Embed Code"), option$7({ value: "songRecovery" }, "⚠ Recover Recent Song..."));
             this._editMenu = select$7({ style: "width: 100%;" }, option$7({ selected: true, disabled: true, hidden: false }, "Edit"), option$7({ value: "undo" }, "Undo (Z)"), option$7({ value: "redo" }, "Redo (Y)"), option$7({ value: "copy" }, "Copy Pattern (C)"), option$7({ value: "pasteNotes" }, "Paste Pattern Notes (V)"), option$7({ value: "pasteNumbers" }, "Paste Pattern Numbers (" + EditorConfig.ctrlSymbol + "⇧V)"), option$7({ value: "insertBars" }, "Insert Bar (⏎)"), option$7({ value: "deleteBars" }, "Delete Selected Bars (⌫)"), option$7({ value: "insertChannel" }, "Insert Channel (" + EditorConfig.ctrlSymbol + "⏎)"), option$7({ value: "deleteChannel" }, "Delete Selected Channels (" + EditorConfig.ctrlSymbol + "⌫)"), option$7({ value: "selectChannel" }, "Select Channel (⇧A)"), option$7({ value: "selectAll" }, "Select All (A)"), option$7({ value: "duplicatePatterns" }, "Duplicate Reused Patterns (D)"), option$7({ value: "transposeUp" }, "Move Notes Up (+ or ⇧+)"), option$7({ value: "transposeDown" }, "Move Notes Down (- or ⇧-)"), option$7({ value: "moveNotesSideways" }, "Move All Notes Sideways... (W)"), option$7({ value: "beatsPerBar" }, "Change Beats Per Bar..."), option$7({ value: "barCount" }, "Change Song Length... (L)"), option$7({ value: "channelSettings" }, "Channel Settings... (Q)"), option$7({ value: "limiterSettings" }, "Limiter Settings... (⇧L)"));
             this._optionsMenu = select$7({ style: "width: 100%;" }, option$7({ selected: true, disabled: true, hidden: false }, "Preferences"), option$7({ value: "autoPlay" }, "Auto Play on Load"), option$7({ value: "autoFollow" }, "Keep Current Pattern Selected"), option$7({ value: "enableNotePreview" }, "Hear Preview of Added Notes"), option$7({ value: "showLetters" }, "Show Piano Keys"), option$7({ value: "showFifth" }, 'Highlight "Fifth" of Song Key'), option$7({ value: "notesOutsideScale" }, "Allow Adding Notes Not in Scale"), option$7({ value: "setDefaultScale" }, "Use Current Scale as Default"), option$7({ value: "showChannels" }, "Show Notes From All Channels"), option$7({ value: "showScrollBar" }, "Show Octave Scroll Bar"), option$7({ value: "alwaysFineNoteVol" }, "Always Fine Note Volume"), option$7({ value: "enableChannelMuting" }, "Enable Channel Muting"), option$7({ value: "displayBrowserUrl" }, "Display Song Data in URL"), option$7({ value: "displayVolumeBar" }, "Show Playback Volume"), option$7({ value: "layout" }, "Set Layout..."), option$7({ value: "colorTheme" }, "Set Theme..."), option$7({ value: "recordingSetup" }, "Set Up Note Recording..."));
             this._scaleSelect = buildOptions(select$7(), Config.scales.map(scale => scale.name));
@@ -28872,7 +28976,7 @@ You should be redirected to the song at:<br /><br />
                     else {
                         this._reverbRow.style.display = "none";
                     }
-                    if (instrument.type == 0 || instrument.type == 8 || instrument.type == 5 || instrument.type == 7) {
+                    if (instrument.type == 0 || instrument.type == 8 || instrument.type == 5 || instrument.type == 7 || instrument.type == 3 || instrument.type == 6 || instrument.type == 1) {
                         this._unisonSelectRow.style.display = "";
                         setSelectedValue(this._unisonSelect, instrument.unison);
                     }
@@ -29551,6 +29655,12 @@ You should be redirected to the song at:<br /><br />
                             this._toggleRecord();
                             event.preventDefault();
                             this.refocusStage();
+                        }
+                        else if (canPlayNotes)
+                            break;
+                        if (needControlForShortcuts == (event.ctrlKey || event.metaKey)) {
+                            location.href = "player/#song=" + this._doc.song.toBase64String();
+                            event.preventDefault();
                         }
                         break;
                     case 90:
