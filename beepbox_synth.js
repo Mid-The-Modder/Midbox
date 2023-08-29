@@ -211,6 +211,7 @@ var beepbox = (function (exports) {
         { name: "hold", voices: 2, spread: 0.003, offset: 0.0, expression: 0.8, sign: -2.5 },
         { name: "buried", voices: 2, spread: 0.03575, offset: -36.0, expression: 1.4, sign: 1.0 },
         { name: "corrupt", voices: 2, spread: 18, offset: 48.0, expression: 0.7, sign: 0.7 },
+        { name: "weird octave", voices: 2, spread: 5.85, offset: 5.85, expression: 0.75, sign: 1.0 },
     ]);
     Config.effectNames = ["reverb", "chorus", "panning", "distortion", "bitcrusher", "note filter", "echo", "pitch shift", "detune", "vibrato", "transition type", "chord type"];
     Config.effectOrder = [2, 10, 11, 7, 8, 9, 5, 3, 4, 1, 6, 0];
@@ -866,6 +867,8 @@ var beepbox = (function (exports) {
                 { name: "build-up pad", midiProgram: 80, settings: { "type": "FM", "eqFilter": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "high-pass", "cutoffHz": 250, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 353.55, "linearGain": 0.1768 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.3536 }], "effects": ["note filter", "reverb"], "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.3536 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 16000, "linearGain": 0.3536 }], "panDelay": 10, "reverb": 32, "fadeInSeconds": 0, "fadeOutTicks": 96, "algorithm": "(1 2)←(3 4)", "feedbackType": "4⟲", "feedbackAmplitude": 9, "operators": [{ "frequency": "1×", "amplitude": 13, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "1×", "amplitude": 13, "waveform": "pulse width", "pulseWidth": 6 }, { "frequency": "3×", "amplitude": 0, "waveform": "triangle", "pulseWidth": 5 }, { "frequency": "~2×", "amplitude": 0, "waveform": "sine", "pulseWidth": 5 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "flare 1", "index": 2 }, { "target": "noteFilterFreq", "envelope": "slow swell", "index": 0 }] } },
                 { name: "ambient pulse 2", midiProgram: 80, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 1189.21, "linearGain": 0.7071 }, { "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "peak", "cutoffHz": 420.45, "linearGain": 8 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 1189.21, "linearGain": 0.7071 }, { "type": "high-pass", "cutoffHz": 594.6, "linearGain": 1.4142 }, { "type": "peak", "cutoffHz": 420.45, "linearGain": 8 }], "effects": ["chord type", "note filter", "reverb"], "chord": "medium strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 1681.79, "linearGain": 1 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 1681.79, "linearGain": 1 }], "panDelay": 10, "reverb": 32, "fadeInSeconds": 0, "fadeOutTicks": 72, "harmonics": [57, 57, 71, 57, 43, 43, 43, 71, 43, 43, 43, 57, 71, 86, 100, 86, 57, 57, 43, 43, 43, 57, 43, 29, 43, 57, 57, 43], "unison": "vary", "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "tremolo5" }] } },
                 { name: "hyper synth saw", midiProgram: 80, settings: { "type": "chip", "eqFilter": [{ "type": "peak", "cutoffHz": 19027.31, "linearGain": 11.3137 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 1.4142 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "peak", "cutoffHz": 19027.31, "linearGain": 11.3137 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 1.4142 }], "effects": ["chord type", "detune", "vibrato", "distortion", "chorus", "echo", "reverb"], "chord": "medium strum", "fastTwoNoteArp": false, "arpeggioSpeed": 12, "detuneCents": 16, "vibrato": "delayed", "vibratoDepth": 0.3, "vibratoDelay": 18.5, "vibratoSpeed": 10, "vibratoType": 0, "distortion": 14, "aliases": false, "panDelay": 10, "chorus": 86, "echoSustain": 43, "echoDelayBeats": 1, "reverb": 58, "fadeInSeconds": 0, "fadeOutTicks": 96, "wave": "sawtooth", "unison": "hyper", "envelopes": [] } },
+                { name: "mechanical blip", midiProgram: 80, settings: { "type": "chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 19027.31, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.25 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "high-pass", "cutoffHz": 125, "linearGain": 0.3536 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 19027.31, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.25 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.3536 }, { "type": "high-pass", "cutoffHz": 125, "linearGain": 0.3536 }], "effects": ["transition type", "detune", "note filter", "bitcrusher", "chorus", "echo", "reverb"], "transition": "continue in pattern", "clicklessTransition": false, "detuneCents": 16, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 500, "linearGain": 4 }, { "type": "high-pass", "cutoffHz": 176.78, "linearGain": 11.3137 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 500, "linearGain": 4 }, { "type": "high-pass", "cutoffHz": 176.78, "linearGain": 11.3137 }], "noteSubFilters1": [{ "type": "low-pass", "cutoffHz": 19027.31, "linearGain": 0.7071 }], "bitcrusherOctave": 4.5, "bitcrusherQuantization": 43, "panDelay": 10, "chorus": 43, "echoSustain": 57, "echoDelayBeats": 1.5, "reverb": 23, "fadeInSeconds": 0, "fadeOutTicks": -1, "wave": "rounded", "unison": "none", "envelopes": [] } },
+                { name: "another piano", midiProgram: 80, settings: { "type": "PWM", "eqFilter": [{ "type": "low-pass", "cutoffHz": 11313.71, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 9513.66, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2378.41, "linearGain": 2 }, { "type": "peak", "cutoffHz": 3363.59, "linearGain": 1.4142 }, { "type": "high-pass", "cutoffHz": 88.39, "linearGain": 1 }], "eqFilterType": false, "eqSimpleCut": 10, "eqSimplePeak": 0, "eqSubFilters0": [{ "type": "low-pass", "cutoffHz": 11313.71, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 9513.66, "linearGain": 0.3536 }, { "type": "peak", "cutoffHz": 2378.41, "linearGain": 2 }, { "type": "peak", "cutoffHz": 3363.59, "linearGain": 1.4142 }, { "type": "high-pass", "cutoffHz": 88.39, "linearGain": 1 }], "effects": ["detune", "note filter", "reverb"], "detuneCents": 16, "noteFilterType": false, "noteSimpleCut": 10, "noteSimplePeak": 0, "noteFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.125 }], "noteSubFilters0": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.125 }], "panDelay": 10, "reverb": 26, "fadeInSeconds": 0, "fadeOutTicks": 24, "pulseWidth": 44, "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "punch" }, { "target": "noteVolume", "envelope": "twang 2" }, { "target": "unison", "envelope": "twang 1" }, { "target": "unison", "envelope": "twang 1" }, { "target": "unison", "envelope": "twang 1" }, { "target": "unison", "envelope": "twang 1" }, { "target": "unison", "envelope": "twang 1" }] } },
             ])
         },
         {
@@ -1892,14 +1895,14 @@ var beepbox = (function (exports) {
     }
     class Operator {
         constructor(index) {
-            this.frequency = 0;
+            this.frequency = 6;
             this.amplitude = 0;
             this.waveform = 0;
             this.pulseWidth = 0.5;
             this.reset(index);
         }
         reset(index) {
-            this.frequency = 0;
+            this.frequency = 6;
             this.amplitude = (index <= 1) ? Config.operatorAmplitudeMax : 0;
             this.waveform = 0;
             this.pulseWidth = 5;
@@ -3103,7 +3106,7 @@ var beepbox = (function (exports) {
                 }
             }
             if (this.type == 0) {
-                const legacyWaveNames = { "triangle": 1, "square": 2, "pulse wide": 3, "pulse narrow": 4, "sawtooth": 5, "double saw": 6, "double pulse": 7, "spiky": 8, "plateau": 0 };
+                const legacyWaveNames = { "triangle": 1, "square": 2, "pulse wide": 3, "pulse narrow": 5, "sawtooth": 11, "double saw": 12, "double pulse": 13, "spiky": 14, "plateau": 0 };
                 this.chipWave = legacyWaveNames[instrumentObject["wave"]] != undefined ? legacyWaveNames[instrumentObject["wave"]] : Config.chipWaves.findIndex(wave => wave.name == instrumentObject["wave"]);
                 if (this.chipWave == -1)
                     this.chipWave = 1;
@@ -3496,15 +3499,15 @@ var beepbox = (function (exports) {
             this.beatsPerBar = 8;
             this.barCount = 16;
             this.patternsPerChannel = 32;
-            this.rhythm = 1;
+            this.rhythm = 3;
             this.layeredInstruments = false;
             this.patternInstruments = false;
             this.title = "Untitled Project";
             document.title = EditorConfig.versionDisplayName;
             if (andResetChannels) {
-                this.pitchChannelCount = 3;
-                this.noiseChannelCount = 1;
-                this.modChannelCount = 0;
+                this.pitchChannelCount = 4;
+                this.noiseChannelCount = 2;
+                this.modChannelCount = 1;
                 for (let channelIndex = 0; channelIndex < this.getChannelCount(); channelIndex++) {
                     const isNoiseChannel = channelIndex >= this.pitchChannelCount && channelIndex < this.pitchChannelCount + this.noiseChannelCount;
                     const isModChannel = channelIndex >= this.pitchChannelCount + this.noiseChannelCount;
